@@ -43,7 +43,6 @@ RealNumber = Integer.Integer
 ")"							{ generateToken(")", ""); }
 "["							{ generateToken("[", ""); }
 "]"							{ generateToken("]", ""); }
-"="							{ generateToken("=", ""); }
 "{"							{ generateToken("{", ""); }
 "}"							{ generateToken("}", ""); }
 "`"							{ generateToken("`", ""); }
@@ -83,6 +82,11 @@ RealNumber = Integer.Integer
 "while"                  	{generateToken("while","" );}
 "with"                  	{generateToken("with","" );}
 {Integer}                   {generateToken("Integer",yytext());}
+">"                         {generateToken("GT", "");}
+">="                        {generateToken("GE", "");}
+"="                         {generateToken("EQ", "");}
+"<="                        {generateToken("LE", "");}
+"<"                         {generateToken("LT", "");}
 {brancos}					{/* Nao faz nada */}
 
 . { /* Nao faz nada por enquanto. O "." significa qualquer outra coisa */}
