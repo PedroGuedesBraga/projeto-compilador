@@ -1,5 +1,4 @@
 C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\LexicalAnalyzer.java
-C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\Generator.java
-C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\Token.java
-C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\SimbolTable.java
-C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\TesteLexico.java
+C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\Parser.java
+C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\Main.java
+C:\Users\Leonardo\Desktop\compilador\src\main\java\compiladores\analisadorLexico\sym.java

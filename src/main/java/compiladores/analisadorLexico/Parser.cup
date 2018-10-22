@@ -25,4 +25,33 @@ THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, INTEGER, GT, GE, EQ, LE, LT;
 
 non terminal inicio;
 
-inicio ::= PROGRAM;
+inicio ::= PROGRAM IDENTIFIER; codigo
+codigo ::= declarações bloco
+declarações ::=  constante variavel procedimentos
+constante ::= CONST constantes; | vazio
+constantes ::= IDENTIFIER = numero,constantes|IDENTIFIER = numero
+variavel ::= VAR variaveis;|vazio
+variaveis ::= IDENTIFIER,variaveis|IDENTIFIER
+procedimentos ::= procedimento;procedimentos|vazio
+procedimento ::= PROCEDURE IDENTIFIER parametros declaração bloco
+parametros ::= (variaveis)|vazio
+bloco ::= BEGIN comandos   END
+declaração := constante variavel
+comandos ::= comando; comandos | vazio
+comando::=  PRINT (lista-arg)|IF exp-relacional THEN comando else | IDENTIFIER ::= exp |WHILE exp-relacional DO bloco
+else ::= ELSE comandos
+exp::= exp+termo|exp-termo|termo
+termo ::= termo * fator | termo / fator |fator
+fator ::= (exp) | IDENTIFIER| numero
+exp-relacional ::= exp op-relacional exp
+op-relacional::= = | <> | < | > | <= |>=
+
+
+
+
+
+
+ 
+
+
+
