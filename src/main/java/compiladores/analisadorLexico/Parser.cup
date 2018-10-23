@@ -18,33 +18,28 @@ parser code {:
 :};
 
 terminal PROGRAM, BEGIN, END, IDENTIFIER, PLUS, MINUS, MULT, DIV, ASSIGNMENT, COMMA, DOT,
-SEMICOLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
+SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
 CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
 FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
-THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, INTEGER, GT, GE, EQ, LE, LT;
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, INTEGER, GT, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING;
 
-non terminal inicio;
+non terminal program, declarations, empty, constants, variables, variable, procedures, constant, number, type_variable;
 
-inicio ::= PROGRAM IDENTIFIER; codigo
-codigo ::= declarações bloco
-declarações ::=  constante variavel procedimentos
-constante ::= CONST constantes; | vazio
-constantes ::= IDENTIFIER = numero,constantes|IDENTIFIER = numero
-variavel ::= VAR variaveis;|vazio
-variaveis ::= IDENTIFIER,variaveis|IDENTIFIER
-procedimentos ::= procedimento;procedimentos|vazio
-procedimento ::= PROCEDURE IDENTIFIER parametros declaração bloco
-parametros ::= (variaveis)|vazio
-bloco ::= BEGIN comandos   END
-declaração := constante variavel
-comandos ::= comando; comandos | vazio
-comando::=  PRINT (lista-arg)|IF exp-relacional THEN comando else | IDENTIFIER ::= exp |WHILE exp-relacional DO bloco
-else ::= ELSE comandos
-exp::= exp+termo|exp-termo|termo
-termo ::= termo * fator | termo / fator |fator
-fator ::= (exp) | IDENTIFIER| numero
-exp-relacional ::= exp op-relacional exp
-op-relacional::= = | <> | < | > | <= |>=
+start with program;
+
+
+program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN END DOT;
+empty ::= ;
+declarations ::= declarations constants | declarations variables | empty;
+constants ::= constants constant;
+constant ::= CONST IDENTIFIER ASSIGNMENT number SEMICOLON;
+variables ::= variables variable;
+variable ::= VAR IDENTIFIER COLON type_variable SEMICOLON;
+type_variable ::= BOOLEAN | TYPE_INTEGER | STRING;
+number ::= INTEGER | INTEGER DOT INTEGER;
+
+
+
 
 
 

@@ -33,7 +33,8 @@ private Symbol symbol(int type, Object value) {
 
 ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 Digito = [0-9]
-brancos = [\n| |\t]
+LineTerminator = \r|\n|\r\n
+brancos = {LineTerminator} | [ \t\f]
 Integer = Digito+
 RealNumber = Integer.Integer
 
@@ -51,6 +52,7 @@ RealNumber = Integer.Integer
 "," 						{ return symbol(sym.COMMA); }
 "."							{ return symbol(sym.DOT); }
 ";"							{ return symbol(sym.SEMICOLON); }
+":"                         { return symbol(sym.COLON); }
 "("							{ return symbol(sym.OPEN_PARENTHESES); }
 ")"							{ return symbol(sym.CLOSE_PARENTHESES); }
 "["							{ return symbol(sym.OPEN_BRACKETS); }
@@ -96,6 +98,11 @@ RealNumber = Integer.Integer
 "="                         { return symbol(sym.EQ); }
 "<="                        { return symbol(sym.LE); }
 "<"                         { return symbol(sym.LT); }
+"true"						{ return symbol(sym.TRUE);}
+"false"						{ return symbol(sym.FALSE);}
+"boolean"                   { return symbol(sym.BOOLEAN);}
+"integer"                   { return symbol(sym.TYPE_INTEGER);}
+"string"                    { return symbol(sym.STRING); }
 {brancos}					{/* Nao faz nada */}
 <<EOF>> 					{ return symbol(sym.EOF); }
 
