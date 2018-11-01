@@ -21,22 +21,39 @@ terminal PROGRAM, BEGIN, END, IDENTIFIER, PLUS, MINUS, MULT, DIV, ASSIGNMENT, CO
 SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
 CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
 FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
-THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, INTEGER, GT, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING;
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, INTEGER, GT, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING, REAL;
 
-non terminal program, declarations, empty, constants, variables, variable, procedures, constant, number, type_variable;
+non terminal program, declarations, number, type_declaration, constant_declaration1, variable_declaration1, empty;
 
 start with program;
 
 
 program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN END DOT;
-empty ::= ;
-declarations ::= declarations constants | declarations variables | empty;
-constants ::= constants constant;
-constant ::= CONST IDENTIFIER ASSIGNMENT number SEMICOLON;
-variables ::= variables variable;
-variable ::= VAR IDENTIFIER COLON type_variable SEMICOLON;
-type_variable ::= BOOLEAN | TYPE_INTEGER | STRING;
-number ::= INTEGER | INTEGER DOT INTEGER;
+
+declarations ::= constant_declaration1 
+				 | 
+				 variable_declaration1
+				 |
+				 empty
+				 ; 
+
+constant_declaration1 ::= CONST IDENTIFIER EQ number SEMICOLON;
+
+variable_declaration1 ::= VAR IDENTIFIER COLON type_declaration SEMICOLON;
+
+type_declaration ::= TYPE_INTEGER 
+					 | 
+					 BOOLEAN 
+					 | 
+					 STRING 
+					 | 
+					 REAL
+					 ;
+
+number ::= INTEGER 
+		   | 
+		   INTEGER DOT INTEGER
+		   ;
 
 
 

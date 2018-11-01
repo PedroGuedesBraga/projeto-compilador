@@ -1,4 +1,3 @@
 Program NomeDOPrograma;
-const nome := 3;
 begin
-end. 
+end.

@@ -103,6 +103,7 @@ RealNumber = Integer.Integer
 "boolean"                   { return symbol(sym.BOOLEAN);}
 "integer"                   { return symbol(sym.TYPE_INTEGER);}
 "string"                    { return symbol(sym.STRING); }
+"real"                      { return symbol(sym.REAL); }
 {brancos}					{/* Nao faz nada */}
 <<EOF>> 					{ return symbol(sym.EOF); }
 
