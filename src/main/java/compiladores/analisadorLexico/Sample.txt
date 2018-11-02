@@ -1,3 +1,5 @@
-Program NomeDOPrograma;
+Program NomeDOProgra;
+var mike : integer;
+procedure nomee(rafael, joao:integer);
 begin
 end.

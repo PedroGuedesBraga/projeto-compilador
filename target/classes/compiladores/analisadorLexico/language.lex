@@ -27,6 +27,7 @@ private Symbol symbol(int type, Object value) {
 %}
 
 %caseless
+%unicode
 
 
 
@@ -43,15 +44,15 @@ RealNumber = Integer.Integer
 "program"                       { return symbol(sym.PROGRAM); }
 "begin"                         { return symbol(sym.BEGIN); }
 "end"                      	 { return symbol(sym.END); }
-{ID}                         { return symbol(sym.IDENTIFIER); }
 "+"                         { return symbol(sym.PLUS); }
 "-"                         { return symbol(sym.MINUS); }
 "*"							{ return symbol(sym.MULT); }
 "/"							{ return symbol(sym.DIV); }
 ":="                        { return symbol(sym.ASSIGNMENT); }
+"="                         { return symbol(sym.EQ); }
+";"							{ return symbol(sym.SEMICOLON); }
 "," 						{ return symbol(sym.COMMA); }
 "."							{ return symbol(sym.DOT); }
-";"							{ return symbol(sym.SEMICOLON); }
 ":"                         { return symbol(sym.COLON); }
 "("							{ return symbol(sym.OPEN_PARENTHESES); }
 ")"							{ return symbol(sym.CLOSE_PARENTHESES); }
@@ -93,10 +94,9 @@ RealNumber = Integer.Integer
 "while"                  	{ return symbol(sym.WHILE); }
 "with"                  	{ return symbol(sym.WITH); }
 {Integer}                   { return symbol(sym.INTEGER); }
-">"                         { return symbol(sym.GT); }
 ">="                        { return symbol(sym.GE); }
-"="                         { return symbol(sym.EQ); }
 "<="                        { return symbol(sym.LE); }
+">"                         { return symbol(sym.GT); }
 "<"                         { return symbol(sym.LT); }
 "true"						{ return symbol(sym.TRUE);}
 "false"						{ return symbol(sym.FALSE);}
@@ -105,6 +105,7 @@ RealNumber = Integer.Integer
 "string"                    { return symbol(sym.STRING); }
 "real"                      { return symbol(sym.REAL); }
 {brancos}					{/* Nao faz nada */}
+{ID}                         { return symbol(sym.IDENTIFIER); }
 <<EOF>> 					{ return symbol(sym.EOF); }
 
 . { /* Nao faz nada por enquanto. O "." significa qualquer outra coisa */}

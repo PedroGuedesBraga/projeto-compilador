@@ -17,7 +17,7 @@ parser code {:
     
     public void syntax_error(Symbol s){
     System.out.println("compiler has detected a syntax error at line " + s.left 
-        + " column " + s.right);
+        + " column " + s.right + " symbol id: " + s.sym);
 	}
 
 :};
@@ -26,24 +26,83 @@ terminal PROGRAM, BEGIN, END, IDENTIFIER, PLUS, MINUS, MULT, DIV, ASSIGNMENT, CO
 SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
 CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
 FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
-THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, INTEGER, GT, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING, REAL;
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, GT, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING, REAL;
+terminal INTEGER;
 
-non terminal program, declarations, number, type_declaration, constant_declaration1, variable_declaration1, empty;
+non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration1, number, 
+procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
+procedure_arguments1, procedure_arguments2, procedure_declaration, optional_semicolon;
+
+
+/*---------------------------------------------------------- INICIO -----------------------------*/
+
 
 start with program;
 
 
 program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN END DOT;
 
-declarations ::= constant_declaration1 
+declarations ::= declarations constant_declaration1 
 				 | 
-				 variable_declaration1
+				 declarations variable_declaration1
 				 |
-				 empty
+				 declarations procedure_declaration
+				 | 
+				 
 				 ; 
 
+
+
+/*------------------------------------PROCEDURES------------------------------------------------------------------*/	
+
+			
+				/* PROCEDURES - BASEADO EM: https://www.tutorialspoint.com/pascal/pascal_procedures.htm */
+				
+procedure_declaration ::=  procedure_declaration_without_parenthesis SEMICOLON
+						  |
+						   procedure_declaration_with_parenthesis SEMICOLON
+						  ;
+
+/*Declaracao de procedures sem parenteses*/
+procedure_declaration_without_parenthesis ::= PROCEDURE IDENTIFIER;
+
+/*Declaracao de procedures com parenteses (pode ter nenhum ou varios argumentos) */
+procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER OPEN_PARENTHESES procedure_arguments CLOSE_PARENTHESES;
+
+
+				
+
+/* Argumentos de uma procedure na forma de declarar um argumento ou varios argumentos de uma vez: "declaracao1, declaracao2 : TIPO"  */
+procedure_arguments ::= IDENTIFIER COMMA procedure_arguments
+					  | 
+					  IDENTIFIER COLON type_declaration optional_semicolon
+					  | 
+					  
+					  ;
+
+optional_semicolon ::= SEMICOLON | ;
+
+
+/* (TALVEZ NAO PRECISE, POR ISSO TÁ COMENTADO) --  Argumentos de uma procedure na forma de declarar um argumento por vez: "declaracao : TIPO"  */  
+/*procedure_arguments2 ::= IDENTIFIER COLON type_declaration;*/
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+
+							/*CONSTANTES - Not working yet*/
 constant_declaration1 ::= CONST IDENTIFIER EQ number SEMICOLON;
 
+
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+
+
+							/*DECLARACAO DE VARIAVEIS*/
 variable_declaration1 ::= VAR IDENTIFIER COLON type_declaration SEMICOLON;
 
 type_declaration ::= TYPE_INTEGER 
@@ -55,9 +114,10 @@ type_declaration ::= TYPE_INTEGER
 					 REAL
 					 ;
 
-number ::= INTEGER 
+							/*NUMEROS*/			 
+number ::= INTEGER DOT INTEGER 
 		   | 
-		   INTEGER DOT INTEGER
+		   INTEGER
 		   ;
 
 
