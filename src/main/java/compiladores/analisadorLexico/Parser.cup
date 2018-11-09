@@ -31,7 +31,7 @@ terminal INTEGER;
 
 non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration1, number, 
 procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
-procedure_arguments1, procedure_arguments2, procedure_declaration, optional_semicolon;
+procedure_arguments1, procedure_arguments2, procedure_declaration, optional_semicolon, list_of_identifiers;
 
 
 /*---------------------------------------------------------- INICIO -----------------------------*/
@@ -73,14 +73,18 @@ procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER OPEN_PARENTHESES
 				
 
 /* Argumentos de uma procedure na forma de declarar um argumento ou varios argumentos de uma vez: "declaracao1, declaracao2 : TIPO"  */
-procedure_arguments ::= IDENTIFIER COMMA procedure_arguments
-					  | 
-					  IDENTIFIER COLON type_declaration optional_semicolon
-					  | 
-					  
-					  ;
 
-optional_semicolon ::= SEMICOLON | ;
+procedure_arguments ::= procedure_arguments1 | procedure_arguments2;
+
+procedure_arguments1 ::= VAR list_of_identifiers SEMICOLON procedure_arguments 
+						| 
+						VAR list_of_identifiers
+						;
+procedure_arguments2 ::= ;
+					  
+list_of_identifiers ::= IDENTIFIER COMMA list_of_identifiers | IDENTIFIER COLON type_declaration;
+
+
 
 
 /* (TALVEZ NAO PRECISE, POR ISSO TÁ COMENTADO) --  Argumentos de uma procedure na forma de declarar um argumento por vez: "declaracao : TIPO"  */  
