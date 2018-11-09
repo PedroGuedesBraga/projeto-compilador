@@ -31,7 +31,7 @@ terminal INTEGER;
 
 non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration1, number, 
 procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
-procedure_arguments1, procedure_arguments2, procedure_declaration, optional_semicolon;
+procedure_arguments1, procedure_arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var;
 
 
 /*---------------------------------------------------------- INICIO -----------------------------*/
@@ -46,7 +46,7 @@ declarations ::= declarations constant_declaration1
 				 | 
 				 declarations variable_declaration1
 				 |
-				 declarations procedure_declaration
+				 declarations procedure_declaration BEGIN END SEMICOLON
 				 | 
 				 
 				 ; 
@@ -55,6 +55,7 @@ declarations ::= declarations constant_declaration1
 
 /*------------------------------------PROCEDURES------------------------------------------------------------------*/	
 
+			
 			
 				/* PROCEDURES - BASEADO EM: https://www.tutorialspoint.com/pascal/pascal_procedures.htm */
 				
@@ -73,26 +74,25 @@ procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER OPEN_PARENTHESES
 				
 
 /* Argumentos de uma procedure na forma de declarar um argumento ou varios argumentos de uma vez: "declaracao1, declaracao2 : TIPO"  */
-procedure_arguments ::= IDENTIFIER COMMA procedure_arguments
-					  | 
-					  IDENTIFIER COLON type_declaration optional_semicolon
-					  | 
+
+procedure_arguments ::= procedure_arguments1 | procedure_arguments2;
+
+procedure_arguments1 ::= optional_var list_of_identifiers SEMICOLON procedure_arguments 
+						| 
+						optional_var list_of_identifiers
+						;
+procedure_arguments2 ::= ;
 					  
-					  ;
+list_of_identifiers ::= IDENTIFIER COMMA list_of_identifiers | IDENTIFIER COLON type_declaration;
 
-optional_semicolon ::= SEMICOLON | ;
-
-
-/* (TALVEZ NAO PRECISE, POR ISSO TÁ COMENTADO) --  Argumentos de uma procedure na forma de declarar um argumento por vez: "declaracao : TIPO"  */  
-/*procedure_arguments2 ::= IDENTIFIER COLON type_declaration;*/
-
+optional_var ::= VAR | ;
 
 
 
 
 /*----------------------------------------------------------------------------------------------*/
 
-							/*CONSTANTES - Not working yet*/
+							/*CONSTANTES - Not working yet - APARENTEMENTE N PRECISA*/
 constant_declaration1 ::= CONST IDENTIFIER EQ number SEMICOLON;
 
 
