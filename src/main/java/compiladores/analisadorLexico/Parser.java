@@ -31,14 +31,15 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\031\000\002\002\004\000\002\002\011\000\002\003" +
-    "\004\000\002\003\004\000\002\003\004\000\002\003\002" +
+    "\000\033\000\002\002\004\000\002\002\011\000\002\003" +
+    "\004\000\002\003\004\000\002\003\007\000\002\003\002" +
     "\000\002\016\004\000\002\016\004\000\002\010\004\000" +
     "\002\011\007\000\002\012\003\000\002\012\003\000\002" +
     "\014\006\000\002\014\004\000\002\015\002\000\002\020" +
-    "\005\000\002\020\005\000\002\005\007\000\002\006\007" +
-    "\000\002\004\003\000\002\004\003\000\002\004\003\000" +
-    "\002\004\003\000\002\007\005\000\002\007\003" });
+    "\005\000\002\020\005\000\002\021\003\000\002\021\002" +
+    "\000\002\005\007\000\002\006\007\000\002\004\003\000" +
+    "\002\004\003\000\002\004\003\000\002\004\003\000\002" +
+    "\007\005\000\002\007\003" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -46,37 +47,38 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\062\000\004\004\005\001\002\000\004\002\064\001" +
+    "\000\066\000\004\004\005\001\002\000\004\002\070\001" +
     "\002\000\004\007\006\001\002\000\004\017\007\001\002" +
     "\000\012\005\ufffc\033\ufffc\055\ufffc\065\ufffc\001\002\000" +
     "\012\005\020\033\021\055\012\065\014\001\002\000\004" +
-    "\017\063\001\002\000\004\007\044\001\002\000\004\017" +
-    "\043\001\002\000\004\007\033\001\002\000\012\005\ufffd" +
-    "\033\ufffd\055\ufffd\065\ufffd\001\002\000\012\005\uffff\033" +
-    "\uffff\055\uffff\065\uffff\001\002\000\012\005\ufffe\033\ufffe" +
-    "\055\ufffe\065\ufffe\001\002\000\004\006\031\001\002\000" +
-    "\004\007\022\001\002\000\004\072\023\001\002\000\004" +
-    "\103\024\001\002\000\006\016\027\017\uffe9\001\002\000" +
-    "\004\017\026\001\002\000\012\005\ufff0\033\ufff0\055\ufff0" +
-    "\065\ufff0\001\002\000\004\103\030\001\002\000\004\017" +
-    "\uffea\001\002\000\004\016\032\001\002\000\004\002\000" +
-    "\001\002\000\004\020\034\001\002\000\012\077\041\100" +
-    "\040\101\035\102\037\001\002\000\006\017\uffec\022\uffec" +
-    "\001\002\000\004\017\042\001\002\000\006\017\uffeb\022" +
-    "\uffeb\001\002\000\006\017\uffee\022\uffee\001\002\000\006" +
-    "\017\uffed\022\uffed\001\002\000\012\005\uffef\033\uffef\055" +
-    "\uffef\065\uffef\001\002\000\012\005\ufffb\033\ufffb\055\ufffb" +
-    "\065\ufffb\001\002\000\006\017\ufff9\021\045\001\002\000" +
-    "\006\022\ufff3\065\046\001\002\000\004\007\053\001\002" +
-    "\000\004\022\052\001\002\000\004\022\ufff6\001\002\000" +
-    "\004\022\ufff7\001\002\000\004\017\ufff8\001\002\000\006" +
-    "\015\057\020\060\001\002\000\006\017\055\022\ufff4\001" +
-    "\002\000\006\022\ufff3\065\046\001\002\000\004\022\ufff5" +
-    "\001\002\000\004\007\053\001\002\000\012\077\041\100" +
-    "\040\101\035\102\037\001\002\000\006\017\ufff1\022\ufff1" +
-    "\001\002\000\006\017\ufff2\022\ufff2\001\002\000\012\005" +
-    "\ufffa\033\ufffa\055\ufffa\065\ufffa\001\002\000\004\002\001" +
-    "\001\002" });
+    "\017\067\001\002\000\004\007\047\001\002\000\004\017" +
+    "\046\001\002\000\004\007\036\001\002\000\004\005\033" +
+    "\001\002\000\012\005\uffff\033\uffff\055\uffff\065\uffff\001" +
+    "\002\000\012\005\ufffe\033\ufffe\055\ufffe\065\ufffe\001\002" +
+    "\000\004\006\031\001\002\000\004\007\022\001\002\000" +
+    "\004\072\023\001\002\000\004\103\024\001\002\000\006" +
+    "\016\027\017\uffe7\001\002\000\004\017\026\001\002\000" +
+    "\012\005\uffee\033\uffee\055\uffee\065\uffee\001\002\000\004" +
+    "\103\030\001\002\000\004\017\uffe8\001\002\000\004\016" +
+    "\032\001\002\000\004\002\000\001\002\000\004\006\034" +
+    "\001\002\000\004\017\035\001\002\000\012\005\ufffd\033" +
+    "\ufffd\055\ufffd\065\ufffd\001\002\000\004\020\037\001\002" +
+    "\000\012\077\044\100\043\101\040\102\042\001\002\000" +
+    "\006\017\uffea\022\uffea\001\002\000\004\017\045\001\002" +
+    "\000\006\017\uffe9\022\uffe9\001\002\000\006\017\uffec\022" +
+    "\uffec\001\002\000\006\017\uffeb\022\uffeb\001\002\000\012" +
+    "\005\uffed\033\uffed\055\uffed\065\uffed\001\002\000\004\005" +
+    "\ufffb\001\002\000\006\017\ufff9\021\050\001\002\000\010" +
+    "\007\uffef\022\ufff3\065\051\001\002\000\004\007\ufff0\001" +
+    "\002\000\004\022\066\001\002\000\004\007\056\001\002" +
+    "\000\004\022\ufff6\001\002\000\004\022\ufff7\001\002\000" +
+    "\006\015\062\020\063\001\002\000\006\017\060\022\ufff4" +
+    "\001\002\000\010\007\uffef\022\ufff3\065\051\001\002\000" +
+    "\004\022\ufff5\001\002\000\004\007\056\001\002\000\012" +
+    "\077\044\100\043\101\040\102\042\001\002\000\006\017" +
+    "\ufff1\022\ufff1\001\002\000\006\017\ufff2\022\ufff2\001\002" +
+    "\000\004\017\ufff8\001\002\000\004\005\ufffa\001\002\000" +
+    "\004\002\001\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -84,7 +86,7 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\062\000\004\002\003\001\001\000\002\001\001\000" +
+    "\000\066\000\004\002\003\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\004\003\007\001\001" +
     "\000\014\005\015\006\016\010\012\011\010\016\014\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
@@ -93,16 +95,17 @@ public class Parser extends java_cup.runtime.lr_parser {
     "\001\001\000\004\007\024\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\004\004\035\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\010\012\046\014\050\015\047\001\001\000\004\020" +
-    "\053\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\010\012\055\014\050\015\047\001\001\000\002" +
-    "\001\001\000\004\020\061\001\001\000\004\004\060\001" +
+    "\000\004\004\040\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001" });
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\012\012\051\014\054\015\053\021\052\001\001\000\002" +
+    "\001\001\000\002\001\001\000\004\020\056\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\012\012\060\014\054\015\053\021\052\001" +
+    "\001\000\002\001\001\000\004\020\064\001\001\000\004" +
+    "\004\063\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -224,11 +227,11 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // declarations ::= declarations procedure_declaration 
+          case 4: // declarations ::= declarations procedure_declaration BEGIN END SEMICOLON 
             {
               Object RESULT =null;
 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("declarations",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("declarations",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
@@ -296,7 +299,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // procedure_arguments1 ::= VAR list_of_identifiers SEMICOLON procedure_arguments 
+          case 12: // procedure_arguments1 ::= optional_var list_of_identifiers SEMICOLON procedure_arguments 
             {
               Object RESULT =null;
 
@@ -305,7 +308,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // procedure_arguments1 ::= VAR list_of_identifiers 
+          case 13: // procedure_arguments1 ::= optional_var list_of_identifiers 
             {
               Object RESULT =null;
 
@@ -341,7 +344,25 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // constant_declaration1 ::= CONST IDENTIFIER EQ number SEMICOLON 
+          case 17: // optional_var ::= VAR 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("optional_var",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 18: // optional_var ::= 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("optional_var",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 19: // constant_declaration1 ::= CONST IDENTIFIER EQ number SEMICOLON 
             {
               Object RESULT =null;
 
@@ -350,7 +371,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 18: // variable_declaration1 ::= VAR IDENTIFIER COLON type_declaration SEMICOLON 
+          case 20: // variable_declaration1 ::= VAR IDENTIFIER COLON type_declaration SEMICOLON 
             {
               Object RESULT =null;
 
@@ -359,7 +380,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 19: // type_declaration ::= TYPE_INTEGER 
+          case 21: // type_declaration ::= TYPE_INTEGER 
             {
               Object RESULT =null;
 
@@ -368,7 +389,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 20: // type_declaration ::= BOOLEAN 
+          case 22: // type_declaration ::= BOOLEAN 
             {
               Object RESULT =null;
 
@@ -377,7 +398,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // type_declaration ::= STRING 
+          case 23: // type_declaration ::= STRING 
             {
               Object RESULT =null;
 
@@ -386,7 +407,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 22: // type_declaration ::= REAL 
+          case 24: // type_declaration ::= REAL 
             {
               Object RESULT =null;
 
@@ -395,7 +416,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 23: // number ::= INTEGER DOT INTEGER 
+          case 25: // number ::= INTEGER DOT INTEGER 
             {
               Object RESULT =null;
 
@@ -404,7 +425,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 24: // number ::= INTEGER 
+          case 26: // number ::= INTEGER 
             {
               Object RESULT =null;
 

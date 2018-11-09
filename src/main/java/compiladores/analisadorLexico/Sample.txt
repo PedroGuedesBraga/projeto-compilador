@@ -1,5 +1,7 @@
 Program NomeDOProgra;
 var mike : integer;
-procedure nomee(var argumento1, arg4, arg2 : integer; var estringue, estrigue2 : string; var pipoca: real; var nome, idade : boolean);
+procedure nomee(var argumento1, arg4, arg2 : integer; var estringue, estrigue2 : string; pipoca: real; var nome, idade : boolean);
+begin 
+end;
 begin
 end.
