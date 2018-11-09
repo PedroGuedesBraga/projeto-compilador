@@ -29,7 +29,7 @@ FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD,
 THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, GT, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING, REAL;
 terminal INTEGER;
 
-non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration1, number, 
+non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration, number, 
 procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
 procedure_arguments1, procedure_arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var;
 
@@ -44,7 +44,7 @@ program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN END DOT;
 
 declarations ::= declarations constant_declaration1 
 				 | 
-				 declarations variable_declaration1
+				 declarations variable_declaration
 				 |
 				 declarations procedure_declaration BEGIN END SEMICOLON
 				 | 
@@ -99,12 +99,13 @@ constant_declaration1 ::= CONST IDENTIFIER EQ number SEMICOLON;
 
 
 
-/*----------------------------------------------------------------------------------------------*/
+/*--------------------------DECLARACAO DE VARIAVEIS--------------------------------------------------------*/
+
+							
+variable_declaration ::= optional_var list_of_identifiers SEMICOLON;
 
 
-							/*DECLARACAO DE VARIAVEIS*/
-variable_declaration1 ::= VAR IDENTIFIER COLON type_declaration SEMICOLON;
-
+/*---------------------------DECLARACAO DE TIPOS-------------------------------------------------------------*/
 type_declaration ::= TYPE_INTEGER 
 					 | 
 					 BOOLEAN 
