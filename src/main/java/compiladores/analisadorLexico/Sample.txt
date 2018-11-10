@@ -12,6 +12,10 @@ begin
 end;
 begin
 x := 3 < (5+8);
+c := 'Pipoca';
+time1 := 'River Plate';
+time2 := 'Boca Juniors'; time4 := 'Gremio';
+time3 := 'Palmeiras';
 a := 8 + 7;
 variavelBooleana := True;
 variavelBooleana := False;

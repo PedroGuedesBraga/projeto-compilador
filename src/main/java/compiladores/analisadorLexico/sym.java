@@ -9,6 +9,7 @@ package compiladores.analisadorLexico;
 public class sym {
   /* terminals */
   public static final int INTEGER_DIV = 26;
+  public static final int STRING_LITERAL = 66;
   public static final int FUNCTION = 32;
   public static final int MULT = 8;
   public static final int WITH = 53;
@@ -17,7 +18,7 @@ public class sym {
   public static final int GE = 56;
   public static final int ASSIGNMENT = 10;
   public static final int CASE = 24;
-  public static final int INTEGER = 66;
+  public static final int INTEGER = 67;
   public static final int CLOSE_PARENTHESES = 16;
   public static final int REPEAT = 45;
   public static final int ARRAY = 23;
@@ -142,6 +143,7 @@ public class sym {
   "TYPE_INTEGER",
   "STRING",
   "REAL",
+  "STRING_LITERAL",
   "INTEGER"
   };
 }
