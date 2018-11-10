@@ -34,8 +34,8 @@ procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesi
 arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
 function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
 function_arguments, function_declaration_aux, function_local_declarations, expression_declaration,
-op_relational_declaration,op_aritimetical_declaration,term_declaration,assignment_declaration
-;
+op_relational_declaration,op_aritimetical_declaration,term_declaration,assignment_declaration, program_block;
+
 
 
 /*---------------------------------------------------------- INICIO ----------------------------------------*/
@@ -44,7 +44,7 @@ op_relational_declaration,op_aritimetical_declaration,term_declaration,assignmen
 start with program;
 
 
-program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN END DOT;
+program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN program_block END DOT;
 
 declarations ::= declarations constant_declaration1 
 				 | 
@@ -56,6 +56,11 @@ declarations ::= declarations constant_declaration1
 				 | 
 				 
 				 ; 
+				 
+program_block ::= program_block assignment_declaration 
+				  |
+				  
+				  ;
 
 
 
@@ -150,19 +155,20 @@ function_local_declarations ::= variable_declaration function_local_declarations
 
 /*------------------------------------------DECLARACAO DE EXPRESSOES------------------------------------------------*/
 
-expression_declaration ::=  expression_declaration op_relational_declaration expression_declaration 
-						   |expression_declaration op_aritimetical_declaration expression_declaration 
+expression_declaration ::=  expression_declaration op_relational_declaration term_declaration 
+						   |expression_declaration op_aritimetical_declaration term_declaration
 						   |term_declaration;
 op_relational_declaration ::= EQ | GE | LE | GT | LT | UQ;
 op_aritimetical_declaration ::= PLUS | MINUS | MULT | DIV;
 term_declaration ::= OPEN_PARENTHESES expression_declaration CLOSE_PARENTHESES 
 					 | IDENTIFIER 
-					 | number 
+					 | INTEGER
+					 | INTEGER DOT INTEGER
 					 | TRUE | FALSE;
 
 /*------------------------------------------DECLARACAO DE ATRIBUICAO------------------------------------------------*/
 
-assignment_declaration ::= IDENTIFIER ASSIGNMENT  expression_declaration SEMICOLON;
+assignment_declaration ::= IDENTIFIER ASSIGNMENT expression_declaration SEMICOLON;
 
 /*------------------------------------------DECLARACAO DE SETS------------------------------------------------*/
 
