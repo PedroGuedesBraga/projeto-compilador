@@ -31,10 +31,12 @@ terminal INTEGER;
 
 non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration, number, 
 procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
-procedure_arguments1, procedure_arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var;
+arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
+function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
+function_arguments, function_declaration_aux, function_local_declarations;
 
 
-/*---------------------------------------------------------- INICIO -----------------------------*/
+/*---------------------------------------------------------- INICIO ----------------------------------------*/
 
 
 start with program;
@@ -46,7 +48,9 @@ declarations ::= declarations constant_declaration1
 				 | 
 				 declarations variable_declaration
 				 |
-				 declarations procedure_declaration BEGIN END SEMICOLON
+				 declarations procedure_declaration BEGIN END SEMICOLON 
+				 |
+				 declarations function_declaration
 				 | 
 				 
 				 ; 
@@ -75,13 +79,14 @@ procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER OPEN_PARENTHESES
 
 /* Argumentos de uma procedure na forma de declarar um argumento ou varios argumentos de uma vez: "declaracao1, declaracao2 : TIPO"  */
 
-procedure_arguments ::= procedure_arguments1 | procedure_arguments2;
+procedure_arguments ::= arguments1 | arguments2;
 
-procedure_arguments1 ::= optional_var list_of_identifiers SEMICOLON procedure_arguments 
-						| 
-						optional_var list_of_identifiers
-						;
-procedure_arguments2 ::= ;
+arguments1 ::= optional_var list_of_identifiers SEMICOLON arguments1 
+			   | 
+			   optional_var list_of_identifiers
+			   ;
+			   
+arguments2 ::= ;
 					  
 list_of_identifiers ::= IDENTIFIER COMMA list_of_identifiers | IDENTIFIER COLON type_declaration;
 
@@ -120,9 +125,28 @@ number ::= INTEGER DOT INTEGER
 		   | 
 		   INTEGER
 		   ;
+		   
+		   
+/*----------------------------------------DECLARACAO DE FUNCOES---------------------------------------------------*/
+function_declaration ::= function_declaration_aux function_local_declarations BEGIN END SEMICOLON;
+
+function_declaration_aux ::= function_declaration_without_parenthesis 
+						 | 
+						 function_declaration_with_parenthesis;
+
+function_declaration_without_parenthesis ::= FUNCTION IDENTIFIER COLON type_declaration SEMICOLON;
+
+function_declaration_with_parenthesis ::= FUNCTION IDENTIFIER OPEN_PARENTHESES function_arguments
+CLOSE_PARENTHESES COLON type_declaration SEMICOLON;
+
+								/* (Aproveita producoes de procedures) */
+function_arguments ::= arguments1 | arguments2;	
+
+function_local_declarations ::= variable_declaration function_local_declarations | ;							
 
 
 
+/*-----------------------------------------------------------------------------------------------------------------*/
 
 
 

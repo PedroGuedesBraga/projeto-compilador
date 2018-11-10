@@ -1,5 +1,12 @@
 Program NomeDOProgra;
 var mike, john : integer;
+function fazerAlgo(var nome : integer; var idade: integer; var peso, altura : real) : integer;
+var idade, dia : integer; 
+var adulto : boolean;
+peso, altura : real;
+begin
+
+end;
 procedure nomee(var argumento1, arg4, arg2 : integer; var estringue, estrigue2 : string; pipoca: real; var nome, idade : boolean);
 begin 
 end;
