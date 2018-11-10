@@ -26,14 +26,16 @@ terminal PROGRAM, BEGIN, END, IDENTIFIER, PLUS, MINUS, MULT, DIV, ASSIGNMENT, CO
 SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
 CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
 FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
-THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, GT, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING, REAL;
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, GT, UQ, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING, REAL;
 terminal INTEGER;
 
 non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration, number, 
 procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
 arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
 function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
-function_arguments, function_declaration_aux, function_local_declarations;
+function_arguments, function_declaration_aux, function_local_declarations, expression_declaration,
+op_relational_declaration,op_aritimetical_declaration,term_declaration,assignment_declaration, program_block;
+
 
 
 /*---------------------------------------------------------- INICIO ----------------------------------------*/
@@ -42,7 +44,7 @@ function_arguments, function_declaration_aux, function_local_declarations;
 start with program;
 
 
-program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN END DOT;
+program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN program_block END DOT;
 
 declarations ::= declarations constant_declaration1 
 				 | 
@@ -54,6 +56,11 @@ declarations ::= declarations constant_declaration1
 				 | 
 				 
 				 ; 
+				 
+program_block ::= program_block assignment_declaration 
+				  |
+				  
+				  ;
 
 
 
@@ -126,7 +133,6 @@ number ::= INTEGER DOT INTEGER
 		   INTEGER
 		   ;
 		   
-		   
 /*----------------------------------------DECLARACAO DE FUNCOES---------------------------------------------------*/
 function_declaration ::= function_declaration_aux function_local_declarations BEGIN END SEMICOLON;
 
@@ -146,14 +152,25 @@ function_local_declarations ::= variable_declaration function_local_declarations
 
 
 
-/*-----------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DECLARACAO DE EXPRESSOES------------------------------------------------*/
 
+expression_declaration ::=  expression_declaration op_relational_declaration term_declaration 
+						   |expression_declaration op_aritimetical_declaration term_declaration
+						   |term_declaration;
+op_relational_declaration ::= EQ | GE | LE | GT | LT | UQ;
+op_aritimetical_declaration ::= PLUS | MINUS | MULT | DIV;
+term_declaration ::= OPEN_PARENTHESES expression_declaration CLOSE_PARENTHESES 
+					 | INTEGER DOT INTEGER
+					 | INTEGER
+					 | IDENTIFIER 
+					 | TRUE | FALSE;
 
+/*------------------------------------------DECLARACAO DE ATRIBUICAO------------------------------------------------*/
 
+assignment_declaration ::= IDENTIFIER ASSIGNMENT expression_declaration SEMICOLON;
 
+/*------------------------------------------DECLARACAO DE SETS------------------------------------------------*/
 
-
- 
 
 
 

@@ -8,7 +8,13 @@ begin
 
 end;
 procedure nomee(var argumento1, arg4, arg2 : integer; var estringue, estrigue2 : string; pipoca: real; var nome, idade : boolean);
-begin 
+begin
 end;
 begin
+x := 3 < (5+8);
+a := 8 + 7;
+variavelBooleana := True;
+variavelBooleana := False;
+b := x < 8;
+s := (a + b + c) < 8;
 end.
