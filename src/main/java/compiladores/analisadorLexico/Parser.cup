@@ -133,7 +133,6 @@ number ::= INTEGER DOT INTEGER
 		   INTEGER
 		   ;
 		   
-		   
 /*----------------------------------------DECLARACAO DE FUNCOES---------------------------------------------------*/
 function_declaration ::= function_declaration_aux function_local_declarations BEGIN END SEMICOLON;
 
@@ -161,9 +160,9 @@ expression_declaration ::=  expression_declaration op_relational_declaration ter
 op_relational_declaration ::= EQ | GE | LE | GT | LT | UQ;
 op_aritimetical_declaration ::= PLUS | MINUS | MULT | DIV;
 term_declaration ::= OPEN_PARENTHESES expression_declaration CLOSE_PARENTHESES 
-					 | IDENTIFIER 
-					 | INTEGER
 					 | INTEGER DOT INTEGER
+					 | INTEGER
+					 | IDENTIFIER 
 					 | TRUE | FALSE;
 
 /*------------------------------------------DECLARACAO DE ATRIBUICAO------------------------------------------------*/

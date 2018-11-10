@@ -36,8 +36,7 @@ ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 Digito = [0-9]
 LineTerminator = \r|\n|\r\n
 brancos = {LineTerminator} | [ \t\f]
-Integer = Digito+
-RealNumber = Integer.Integer
+Integer = [0-9]+
 
 %%
 

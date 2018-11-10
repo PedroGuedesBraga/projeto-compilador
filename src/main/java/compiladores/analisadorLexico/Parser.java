@@ -47,8 +47,8 @@ public class Parser extends java_cup.runtime.lr_parser {
     "\003\000\002\031\003\000\002\031\003\000\002\031\003" +
     "\000\002\031\003\000\002\031\003\000\002\031\003\000" +
     "\002\032\003\000\002\032\003\000\002\032\003\000\002" +
-    "\032\003\000\002\033\005\000\002\033\003\000\002\033" +
-    "\003\000\002\033\005\000\002\033\003\000\002\033\003" +
+    "\032\003\000\002\033\005\000\002\033\005\000\002\033" +
+    "\003\000\002\033\003\000\002\033\003\000\002\033\003" +
     "\000\002\034\006" });
 
   /** Access to production table. */
@@ -86,9 +86,9 @@ public class Parser extends java_cup.runtime.lr_parser {
     "\070\uffc9\071\uffc9\072\uffc9\073\uffc9\074\uffc9\075\uffc9\001" +
     "\002\000\030\010\061\011\055\012\060\013\065\017\074" +
     "\070\066\071\070\072\057\073\062\074\064\075\067\001" +
-    "\002\000\032\010\uffcc\011\uffcc\012\uffcc\013\uffcc\017\uffcc" +
-    "\022\uffcc\070\uffcc\071\uffcc\072\uffcc\073\uffcc\074\uffcc\075" +
-    "\uffcc\001\002\000\032\010\uffc8\011\uffc8\012\uffc8\013\uffc8" +
+    "\002\000\032\010\uffca\011\uffca\012\uffca\013\uffca\017\uffca" +
+    "\022\uffca\070\uffca\071\uffca\072\uffca\073\uffca\074\uffca\075" +
+    "\uffca\001\002\000\032\010\uffc8\011\uffc8\012\uffc8\013\uffc8" +
     "\017\uffc8\022\uffc8\070\uffc8\071\uffc8\072\uffc8\073\uffc8\074" +
     "\uffc8\075\uffc8\001\002\000\032\010\uffd8\011\uffd8\012\uffd8" +
     "\013\uffd8\017\uffd8\022\uffd8\070\uffd8\071\uffd8\072\uffd8\073" +
@@ -116,9 +116,9 @@ public class Parser extends java_cup.runtime.lr_parser {
     "\010\uffd9\011\uffd9\012\uffd9\013\uffd9\017\uffd9\022\uffd9\070" +
     "\uffd9\071\uffd9\072\uffd9\073\uffd9\074\uffd9\075\uffd9\001\002" +
     "\000\006\006\uffc7\007\uffc7\001\002\000\004\104\076\001" +
-    "\002\000\032\010\uffca\011\uffca\012\uffca\013\uffca\017\uffca" +
-    "\022\uffca\070\uffca\071\uffca\072\uffca\073\uffca\074\uffca\075" +
-    "\uffca\001\002\000\006\020\100\021\101\001\002\000\012" +
+    "\002\000\032\010\uffcc\011\uffcc\012\uffcc\013\uffcc\017\uffcc" +
+    "\022\uffcc\070\uffcc\071\uffcc\072\uffcc\073\uffcc\074\uffcc\075" +
+    "\uffcc\001\002\000\006\020\100\021\101\001\002\000\012" +
     "\100\120\101\117\102\115\103\116\001\002\000\010\007" +
     "\uffec\022\ufff0\065\016\001\002\000\004\022\uffdd\001\002" +
     "\000\004\022\122\001\002\000\004\022\uffde\001\002\000" +
@@ -755,11 +755,11 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 53: // term_declaration ::= IDENTIFIER 
+          case 53: // term_declaration ::= INTEGER DOT INTEGER 
             {
               Object RESULT =null;
 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
@@ -773,11 +773,11 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 55: // term_declaration ::= INTEGER DOT INTEGER 
+          case 55: // term_declaration ::= IDENTIFIER 
             {
               Object RESULT =null;
 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
