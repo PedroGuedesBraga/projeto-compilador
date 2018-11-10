@@ -31,7 +31,7 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\045\000\002\002\004\000\002\002\011\000\002\003" +
+    "\000\070\000\002\002\004\000\002\002\011\000\002\003" +
     "\004\000\002\003\004\000\002\003\007\000\002\003\004" +
     "\000\002\003\002\000\002\016\004\000\002\016\004\000" +
     "\002\010\004\000\002\011\007\000\002\012\003\000\002" +
@@ -42,7 +42,13 @@ public class Parser extends java_cup.runtime.lr_parser {
     "\004\003\000\002\007\005\000\002\007\003\000\002\024" +
     "\007\000\002\026\003\000\002\026\003\000\002\022\007" +
     "\000\002\023\012\000\002\025\003\000\002\025\003\000" +
-    "\002\027\004\000\002\027\002" });
+    "\002\027\004\000\002\027\002\000\002\030\005\000\002" +
+    "\030\005\000\002\030\003\000\002\031\003\000\002\031" +
+    "\003\000\002\031\003\000\002\031\003\000\002\031\003" +
+    "\000\002\031\003\000\002\032\003\000\002\032\003\000" +
+    "\002\032\003\000\002\032\003\000\002\033\005\000\002" +
+    "\033\003\000\002\033\003\000\002\033\003\000\002\033" +
+    "\003\000\002\034\006" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -64,25 +70,25 @@ public class Parser extends java_cup.runtime.lr_parser {
     "\010\005\uffe4\007\uffe4\065\uffe4\001\002\000\004\006\037" +
     "\001\002\000\016\005\ufffe\007\ufffe\033\ufffe\042\ufffe\055" +
     "\ufffe\065\ufffe\001\002\000\010\005\uffe3\007\uffe3\065\uffe3" +
-    "\001\002\000\004\007\030\001\002\000\004\072\031\001" +
-    "\002\000\004\103\032\001\002\000\006\016\035\017\uffe6" +
+    "\001\002\000\004\007\030\001\002\000\004\073\031\001" +
+    "\002\000\004\104\032\001\002\000\006\016\035\017\uffe6" +
     "\001\002\000\004\017\034\001\002\000\016\005\uffed\007" +
     "\uffed\033\uffed\042\uffed\055\uffed\065\uffed\001\002\000\004" +
-    "\103\036\001\002\000\004\017\uffe7\001\002\000\004\016" +
+    "\104\036\001\002\000\004\017\uffe7\001\002\000\004\016" +
     "\040\001\002\000\004\002\000\001\002\000\006\020\042" +
-    "\021\043\001\002\000\012\077\062\100\061\101\057\102" +
+    "\021\043\001\002\000\012\100\062\101\061\102\057\103" +
     "\060\001\002\000\010\007\uffee\022\ufff2\065\016\001\002" +
     "\000\004\022\uffdf\001\002\000\004\022\064\001\002\000" +
     "\004\022\uffe0\001\002\000\004\007\050\001\002\000\006" +
     "\015\054\020\055\001\002\000\006\017\052\022\ufff3\001" +
     "\002\000\006\007\uffee\065\016\001\002\000\004\022\ufff4" +
-    "\001\002\000\004\007\050\001\002\000\012\077\062\100" +
-    "\061\101\057\102\060\001\002\000\006\017\ufff0\022\ufff0" +
+    "\001\002\000\004\007\050\001\002\000\012\100\062\101" +
+    "\061\102\057\103\060\001\002\000\006\017\ufff0\022\ufff0" +
     "\001\002\000\006\017\uffe9\022\uffe9\001\002\000\006\017" +
     "\uffe8\022\uffe8\001\002\000\006\017\uffeb\022\uffeb\001\002" +
     "\000\006\017\uffea\022\uffea\001\002\000\006\017\ufff1\022" +
-    "\ufff1\001\002\000\004\020\065\001\002\000\012\077\062" +
-    "\100\061\101\057\102\060\001\002\000\004\017\067\001" +
+    "\ufff1\001\002\000\004\020\065\001\002\000\012\100\062" +
+    "\101\061\102\057\103\060\001\002\000\004\017\067\001" +
     "\002\000\010\005\uffe1\007\uffe1\065\uffe1\001\002\000\004" +
     "\017\071\001\002\000\010\005\uffe2\007\uffe2\065\uffe2\001" +
     "\002\000\004\006\073\001\002\000\004\017\074\001\002" +
@@ -548,6 +554,177 @@ class CUP$Parser$actions {
               Object RESULT =null;
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("function_local_declarations",21, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 37: // expression_declaration ::= expression_declaration op_relational_declaration expression_declaration 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 38: // expression_declaration ::= expression_declaration op_aritimetical_declaration expression_declaration 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 39: // expression_declaration ::= term_declaration 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 40: // op_relational_declaration ::= EQ 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_relational_declaration",23, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 41: // op_relational_declaration ::= GE 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_relational_declaration",23, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 42: // op_relational_declaration ::= LE 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_relational_declaration",23, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 43: // op_relational_declaration ::= GT 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_relational_declaration",23, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 44: // op_relational_declaration ::= LT 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_relational_declaration",23, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 45: // op_relational_declaration ::= UQ 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_relational_declaration",23, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 46: // op_aritimetical_declaration ::= PLUS 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_aritimetical_declaration",24, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 47: // op_aritimetical_declaration ::= MINUS 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_aritimetical_declaration",24, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 48: // op_aritimetical_declaration ::= MULT 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_aritimetical_declaration",24, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 49: // op_aritimetical_declaration ::= DIV 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("op_aritimetical_declaration",24, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 50: // term_declaration ::= OPEN_PARENTHESES expression_declaration CLOSE_PARENTHESES 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 51: // term_declaration ::= IDENTIFIER 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 52: // term_declaration ::= number 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 53: // term_declaration ::= TRUE 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 54: // term_declaration ::= FALSE 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 55: // assignment_declaration ::= IDENTIFIER ASSIGNMENT expression_declaration SEMICOLON 
+            {
+              Object RESULT =null;
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("assignment_declaration",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 

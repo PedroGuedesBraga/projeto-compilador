@@ -107,5 +107,6 @@ RealNumber = Integer.Integer
 {brancos}					{/* Nao faz nada */}
 {ID}                         { return symbol(sym.IDENTIFIER); }
 <<EOF>> 					{ return symbol(sym.EOF); }
+"<>"						{ return symbol(sym.UQ); }
 
 . { /* Nao faz nada por enquanto. O "." significa qualquer outra coisa */}

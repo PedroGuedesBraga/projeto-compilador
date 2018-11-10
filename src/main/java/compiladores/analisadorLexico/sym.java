@@ -14,10 +14,10 @@ public class sym {
   public static final int WITH = 53;
   public static final int PACKED = 42;
   public static final int CONST = 25;
-  public static final int GE = 55;
+  public static final int GE = 56;
   public static final int ASSIGNMENT = 10;
   public static final int CASE = 24;
-  public static final int INTEGER = 65;
+  public static final int INTEGER = 66;
   public static final int CLOSE_PARENTHESES = 16;
   public static final int REPEAT = 45;
   public static final int ARRAY = 23;
@@ -26,7 +26,7 @@ public class sym {
   public static final int NOT = 39;
   public static final int SEMICOLON = 13;
   public static final int AND = 22;
-  public static final int LT = 58;
+  public static final int LT = 59;
   public static final int RECORD = 44;
   public static final int TYPE = 49;
   public static final int NIL = 38;
@@ -36,25 +36,26 @@ public class sym {
   public static final int COMMA = 11;
   public static final int DIV = 9;
   public static final int BEGIN = 3;
+  public static final int UQ = 55;
   public static final int UNTIL = 50;
   public static final int PLUS = 6;
   public static final int IF = 34;
   public static final int DOT = 12;
-  public static final int LE = 57;
+  public static final int LE = 58;
   public static final int OF = 40;
-  public static final int BOOLEAN = 61;
+  public static final int BOOLEAN = 62;
   public static final int CRASIS = 21;
   public static final int EOF = 0;
-  public static final int TRUE = 59;
+  public static final int TRUE = 60;
   public static final int error = 1;
   public static final int PROGRAM = 2;
   public static final int MOD = 37;
-  public static final int EQ = 56;
-  public static final int REAL = 64;
+  public static final int EQ = 57;
+  public static final int REAL = 65;
   public static final int COLON = 14;
   public static final int CLOSE_CURLY_BRACKETS = 20;
   public static final int ELSE = 29;
-  public static final int TYPE_INTEGER = 62;
+  public static final int TYPE_INTEGER = 63;
   public static final int TO = 48;
   public static final int FILE = 30;
   public static final int GOTO = 33;
@@ -62,9 +63,9 @@ public class sym {
   public static final int THEN = 47;
   public static final int END = 4;
   public static final int CLOSE_BRACKETS = 18;
-  public static final int STRING = 63;
+  public static final int STRING = 64;
   public static final int DOWNTO = 28;
-  public static final int FALSE = 60;
+  public static final int FALSE = 61;
   public static final int LABEL = 36;
   public static final int OPEN_CURLY_BRACKETS = 19;
   public static final int GT = 54;
@@ -130,6 +131,7 @@ public class sym {
   "WHILE",
   "WITH",
   "GT",
+  "UQ",
   "GE",
   "EQ",
   "LE",
