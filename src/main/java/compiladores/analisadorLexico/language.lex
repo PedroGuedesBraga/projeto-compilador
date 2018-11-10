@@ -37,8 +37,10 @@ Digito = [0-9]
 LineTerminator = \r|\n|\r\n
 brancos = {LineTerminator} | [ \t\f]
 Integer = [0-9]+
+String_Literal = '.*'
 
 %%
+
 
 "program"                       { return symbol(sym.PROGRAM); }
 "begin"                         { return symbol(sym.BEGIN); }
@@ -104,7 +106,8 @@ Integer = [0-9]+
 "string"                    { return symbol(sym.STRING); }
 "real"                      { return symbol(sym.REAL); }
 {brancos}					{/* Nao faz nada */}
-{ID}                         { return symbol(sym.IDENTIFIER); }
+{ID}                        { return symbol(sym.IDENTIFIER); }
+{String_Literal}			{ return symbol(sym.STRING_LITERAL); }
 <<EOF>> 					{ return symbol(sym.EOF); }
 "<>"						{ return symbol(sym.UQ); }
 
