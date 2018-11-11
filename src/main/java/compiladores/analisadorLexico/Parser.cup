@@ -4,6 +4,10 @@ import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
 
+action code {:
+ Hashtable table = new Hashtable();
+:};
+
 parser code {:
 
     public void report_error(String message, Object info)  {
@@ -96,8 +100,9 @@ arguments1 ::= optional_var list_of_identifiers SEMICOLON arguments1
 			   
 arguments2 ::= ;
 					  
-list_of_identifiers ::= IDENTIFIER COMMA list_of_identifiers | IDENTIFIER COLON type_declaration;
-
+list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers{:table.put(id):}| 
+						IDENTIFIER:id COLON type_declaration{:table.put(id):};
+						
 optional_var ::= VAR | ;
 
 
@@ -169,7 +174,11 @@ term_declaration ::= OPEN_PARENTHESES expression_declaration CLOSE_PARENTHESES
 
 /*------------------------------------------DECLARACAO DE ATRIBUICAO------------------------------------------------*/
 
-assignment_declaration ::= IDENTIFIER ASSIGNMENT expression_declaration SEMICOLON;
+assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration SEMICOLON{:
+	if(table.get(id) == null){
+		report_error("variavel nao foi declarada", id);
+	}
+:};
 
 /*------------------------------------------DECLARACAO DE SETS------------------------------------------------*/
 
