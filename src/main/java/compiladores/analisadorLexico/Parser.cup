@@ -8,7 +8,11 @@ action code {:
  Hashtable table = new Hashtable();
 :};
 
+
+
 parser code {:
+
+
 
     public void report_error(String message, Object info)  {
         System.out.println("Warning - " + message);
@@ -26,12 +30,15 @@ parser code {:
 
 :};
 
-terminal PROGRAM, BEGIN, END, IDENTIFIER, PLUS, MINUS, MULT, DIV, ASSIGNMENT, COMMA, DOT,
+
+
+terminal PROGRAM, BEGIN, END, PLUS, MINUS, MULT, DIV, ASSIGNMENT, COMMA, DOT,
 SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
 CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
 FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
 THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, GT, UQ, GE, EQ, LE, LT, TRUE, FALSE, BOOLEAN, TYPE_INTEGER, STRING, REAL,
 STRING_LITERAL;
+terminal String IDENTIFIER;
 terminal INTEGER;
 
 non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration, number, 
@@ -100,8 +107,8 @@ arguments1 ::= optional_var list_of_identifiers SEMICOLON arguments1
 			   
 arguments2 ::= ;
 					  
-list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers{:table.put(id):}| 
-						IDENTIFIER:id COLON type_declaration{:table.put(id):};
+list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers{: table.put(id, id); :}| 
+						IDENTIFIER:id COLON type_declaration{: table.put(id, id); :};
 						
 optional_var ::= VAR | ;
 
