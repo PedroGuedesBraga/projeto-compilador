@@ -5,7 +5,7 @@ import java.util.*;
 import java.io.*;
 
 action code {:
- Hashtable type = new Hashtable();
+ Hashtable<String, String> type = new Hashtable();
  Hashtable value = new Hashtable();
  
   class Exp {
@@ -88,6 +88,7 @@ terminal String IDENTIFIER;
 terminal String INTEGER;
 terminal String TRUE;
 terminal String FALSE;
+terminal String STRING;
 terminal String BOOLEAN;
 
 non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration, number, 
@@ -129,6 +130,7 @@ program_block ::= program_block assignment_declaration
 
 			
 			
+							
 				/* PROCEDURES - BASEADO EM: https://www.tutorialspoint.com/pascal/pascal_procedures.htm */
 				
 procedure_declaration ::=  procedure_declaration_without_parenthesis SEMICOLON
@@ -156,13 +158,24 @@ arguments1 ::= optional_var list_of_identifiers SEMICOLON arguments1
 			   
 arguments2 ::= ;
 					  
-list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers{: type.put(id, id); :}| 
-						IDENTIFIER:id COLON type_declaration{: type.put(id, id); :};
+list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!type.containsKey(id)){
+																			type.put(id, (String) tipo);
+																			System.out.println(tipo + " (tipo) - (id) " + id ); 
+																	 		RESULT = tipo;
+																	 }else{
+																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
+																	 } :}
+						| 
+						IDENTIFIER:id COLON type_declaration:tipo {: if(!type.containsKey(id)){
+																			type.put(id, (String) tipo);
+																			System.out.println(tipo + " (tipo) - (id) " + id ); 
+																	 		RESULT = tipo;
+																	 }else{
+																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
+																	 } :};
 						
 optional_var ::= VAR | ;
-
-
-
+				
 
 /*----------------------------------------------------------------------------------------------*/
 
@@ -180,13 +193,11 @@ variable_declaration ::= optional_var list_of_identifiers SEMICOLON;
 
 
 /*---------------------------DECLARACAO DE TIPOS-------------------------------------------------------------*/
-type_declaration ::= TYPE_INTEGER 
+type_declaration ::= TYPE_INTEGER {:RESULT = "integer";:}
 					 | 
-					 BOOLEAN 
+					 BOOLEAN {:RESULT = "boolean";:}
 					 | 
-					 STRING 
-					 | 
-					 REAL
+					 STRING {:RESULT = "string";:}
 					 ;
 
 							/*NUMEROS*/			 
