@@ -110,5 +110,8 @@ String_Literal = '.*'
 {String_Literal}			{ return symbol(sym.STRING_LITERAL); }
 <<EOF>> 					{ return symbol(sym.EOF); }
 "<>"						{ return symbol(sym.UQ); }
+"><"						{ return symbol(sym.SYMDIFF); }
+"include"					{ return symbol(sym.INCLUDE); }
+"exclude"					{ return symbol(sym.EXCLUDE); }
 
 . { /* Nao faz nada por enquanto. O "." significa qualquer outra coisa */}

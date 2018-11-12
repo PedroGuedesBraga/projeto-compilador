@@ -82,7 +82,7 @@ terminal PROGRAM, BEGIN, END, ASSIGNMENT, COMMA, DOT,
 SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
 CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
 FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
-THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, TYPE_INTEGER, REAL;
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, TYPE_INTEGER, REAL, SYMDIFF, INCLUDE, EXCLUDE;
 terminal String STRING_LITERAL;
 terminal String IDENTIFIER;
 terminal String INTEGER;
@@ -109,7 +109,8 @@ non terminal program, declarations, type_declaration, constant_declaration1, var
 procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
 arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
 function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
-function_arguments, function_declaration_aux, function_local_declarations,assignment_declaration, program_block;
+function_arguments, function_declaration_aux, function_local_declarations,assignment_declaration, program_block,
+set_op_declaration, set_declaration, set_body;
 non terminal Exp expression_declaration;
 non terminal String op_aritimetical_declaration;
 non terminal String op_relational_declaration;
@@ -188,7 +189,10 @@ list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!typ
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
-																	 } :};
+																	 } :}
+						| 
+						IDENTIFIER COLON SET OF type_declaration 
+						;
 						
 optional_var ::= VAR | ;
 				
@@ -258,7 +262,10 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   else {
 						    report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);
 						   }:}
-						   |term_declaration:e1 {:RESULT = e1;:};
+						   |term_declaration:e1 {:RESULT = e1;:}
+						   |expression_declaration set_op_declaration set_declaration
+						   |set_declaration
+						   ;
 
 
 op_relational_declaration ::= EQ {:RESULT = "=";:} 
@@ -273,6 +280,11 @@ op_aritimetical_declaration ::= PLUS {:RESULT = "+";:}
 								| MULT {:RESULT = "*";:}
 								| DIV {:RESULT = "/";:};
 
+set_declaration ::= OPEN_BRACKETS set_body
+		    		|OPEN_BRACKETS CLOSE_BRACKETS;
+		    		
+set_body ::= term_declaration COMMA set_body
+			|term_declaration CLOSE_BRACKETS;
 
 term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESES  {:RESULT = e1;:}
 					 | INTEGER:i {:Exp e = new Exp("integer",i);
@@ -286,6 +298,17 @@ term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESE
 					 | STRING_LITERAL:s{:Exp e = new Exp("string",s);
 					 RESULT = e;:};
 
+set_op_declaration ::= PLUS 
+						| MINUS
+						| MULT
+						| SYMDIFF
+						| EQ
+						| UQ
+						| LE
+						| INCLUDE
+						| EXCLUDE
+						| IN;
+			
 /*------------------------------------------DECLARACAO DE ATRIBUICAO------------------------------------------------*/
 
 assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEMICOLON{:
