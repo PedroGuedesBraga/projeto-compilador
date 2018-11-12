@@ -106,7 +106,7 @@ String_Literal = '.*'
 "string"                    { return symbol(sym.STRING); }
 "real"                      { return symbol(sym.REAL); }
 {brancos}					{/* Nao faz nada */}
-{ID}                        { return symbol(sym.IDENTIFIER); }
+{ID}                        { return symbol(sym.IDENTIFIER, yytext()); }
 {String_Literal}			{ return symbol(sym.STRING_LITERAL); }
 <<EOF>> 					{ return symbol(sym.EOF); }
 "<>"						{ return symbol(sym.UQ); }

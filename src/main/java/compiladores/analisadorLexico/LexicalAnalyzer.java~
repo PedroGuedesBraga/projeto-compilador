@@ -903,7 +903,7 @@ private Symbol symbol(int type, Object value) {
             }
           case 69: break;
           case 2: 
-            { return symbol(sym.IDENTIFIER);
+            { return symbol(sym.IDENTIFIER, yytext());
             }
           case 70: break;
           case 3: 
