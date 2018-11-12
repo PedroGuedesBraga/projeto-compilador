@@ -311,4 +311,4 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 
 /*-------------------------------------------------WHILE-------------------------------------------------------*/
 
-while ::= WHILE expression_declaration DO BEGIN program_block END SEMICOLON;
+while ::= WHILE expression_declaration DO BEGIN program_block END SEMICOLON; 
