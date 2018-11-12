@@ -8,17 +8,6 @@ action code {:
  Hashtable<String, String> type = new Hashtable();
  Hashtable value = new Hashtable();
  
-  class Exp {
-	    public String type;
-	    public String code;
-	    
-
-	    Exp(String t, String code) {
-  		  this.type = t;
-  		  this.code = code;
-	    }
-	  
-	}
  
  
 :};
@@ -27,6 +16,17 @@ action code {:
 
 parser code {:
 
+  class Exp {
+	    public String type;
+	    public String code;
+	    
+
+	    public Exp(String t, String code) {
+  		  this.type = t;
+  		  this.code = code;
+	    }
+	  
+	}
 
 
     public void report_error(String message, Object info)  {
@@ -46,10 +46,10 @@ parser code {:
 	public boolean typeCheckAritimetico(String op , Exp e1 , Exp e2){
 			
 			if(e1.type.equals(e2.type)){
-				if(e1.type.equals("integer"){
+				if(e1.type.equals("integer")){
 				 return true;}
-				if(e1.type.equals("string") {
-					if(op = "+"){
+				if(e1.type.equals("string")) {
+					if(op.equals("+")){
 						return true;
 					}
 					else{return false;}
@@ -78,11 +78,11 @@ parser code {:
 
 
 
-terminal PROGRAM, BEGIN, END, PLUS, MINUS, MULT, DIV, ASSIGNMENT, COMMA, DOT,
+terminal PROGRAM, BEGIN, END, ASSIGNMENT, COMMA, DOT,
 SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
 CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
 FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
-THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, GT, UQ, GE, EQ, LE, LT, TYPE_INTEGER, STRING, REAL;
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, TYPE_INTEGER, REAL;
 terminal String STRING_LITERAL;
 terminal String IDENTIFIER;
 terminal String INTEGER;
@@ -90,13 +90,31 @@ terminal String TRUE;
 terminal String FALSE;
 terminal String STRING;
 terminal String BOOLEAN;
+terminal String GT;
+terminal String UQ;
+terminal String GE;
+terminal String EQ;
+terminal String LE;
+terminal String LT;
+
+terminal String PLUS;
+terminal String MINUS;
+terminal String MULT;
+terminal String DIV;
+
+
+
 
 non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration, number, 
 procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
 arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
 function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
-function_arguments, function_declaration_aux, function_local_declarations, expression_declaration,
-op_relational_declaration,op_aritimetical_declaration,term_declaration,assignment_declaration, program_block;
+function_arguments, function_declaration_aux, function_local_declarations,assignment_declaration, program_block;
+non terminal Exp expression_declaration;
+non terminal String op_aritimetical_declaration;
+non terminal String op_relational_declaration;
+non terminal Exp term_declaration;
+
 
 
 
@@ -160,7 +178,6 @@ arguments2 ::= ;
 					  
 list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!type.containsKey(id)){
 																			type.put(id, (String) tipo);
-																			System.out.println(tipo + " (tipo) - (id) " + id ); 
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
@@ -168,7 +185,6 @@ list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!typ
 						| 
 						IDENTIFIER:id COLON type_declaration:tipo {: if(!type.containsKey(id)){
 																			type.put(id, (String) tipo);
-																			System.out.println(tipo + " (tipo) - (id) " + id ); 
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
@@ -232,23 +248,33 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 								Exp e = new Exp("Boolean",e1.code+op+e2.code);
 								RESULT = e;
 							}
-							else{report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code);}
+							else{report_fatal_error("Não se pode operar " + e1.type+ " com "+e2.code, e1);}
 							:}
-						   |expression_declaration:e1 op_aritimetical_declaration term_declaration
-						   {:if(typeCheckAritimetico(String op , Exp e1 , Exp e2)){
+						   |expression_declaration:e1 op_aritimetical_declaration:op term_declaration:e2
+						   {:if(typeCheckAritimetico(op ,e1 ,e2)){
 						   		Exp e = new Exp(e1.type,e1.code+op+e2.code);
+						   		RESULT = e;
 						   }
 						   else {
-						    ("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code)
+						    report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);
 						   }:}
-						   |term_declaration;
+						   |term_declaration:e1 {:RESULT = e1;:};
 
 
-op_relational_declaration ::= EQ | GE | LE | GT | LT | UQ;
-op_aritimetical_declaration ::= PLUS | MINUS | MULT | DIV;
+op_relational_declaration ::= EQ {:RESULT = "=";:} 
+							  | GE {:RESULT = ">=";:}
+							  | LE  {:RESULT = "<=";:}
+							  | GT  {:RESULT = ">";:}
+							  | LT  {:RESULT = "<";:}
+							  | UQ {:RESULT = "<>";:};
+							  
+op_aritimetical_declaration ::= PLUS {:RESULT = "+";:}
+								| MINUS {:RESULT = "-";:}
+								| MULT {:RESULT = "*";:}
+								| DIV {:RESULT = "/";:};
 
 
-term_declaration ::= OPEN_PARENTHESES expression_declaration CLOSE_PARENTHESES 
+term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESES  {:RESULT = e1;:}
 					 | INTEGER:i {:Exp e = new Exp("integer",i);
 					 RESULT = e;:}
 					 | IDENTIFIER:id {:Exp e = new Exp(type.get(id),id);
@@ -264,16 +290,16 @@ term_declaration ::= OPEN_PARENTHESES expression_declaration CLOSE_PARENTHESES
 
 assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEMICOLON{:
 	if(type.get(id) != null){
-		if(type.get(id).equals(e.type){
+		if(type.get(id).equals(e.type)){
 				value.put(id,e.code);
 		}
 		
-		else{ report_fatal_error("O tipo" + type.get(id) + "não pode ser associado ao tipo" +e.type, id); }
+		else{ report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, id); }
 		
 	}
 	
 	else {
-	report_fatal_error("variavel nao foi declarada anteriormente", id);
+	report_fatal_error("Variavel nao foi declarada anteriormente " + id, id);
 	}
 	
 	
