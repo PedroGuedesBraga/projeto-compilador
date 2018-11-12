@@ -9,7 +9,7 @@ package compiladores.analisadorLexico;
 public class sym {
   /* terminals */
   public static final int INTEGER_DIV = 25;
-  public static final int STRING_LITERAL = 65;
+  public static final int STRING_LITERAL = 62;
   public static final int FUNCTION = 31;
   public static final int MULT = 7;
   public static final int WITH = 52;
@@ -44,7 +44,7 @@ public class sym {
   public static final int DOT = 11;
   public static final int LE = 57;
   public static final int OF = 39;
-  public static final int BOOLEAN = 61;
+  public static final int BOOLEAN = 65;
   public static final int CRASIS = 20;
   public static final int EOF = 0;
   public static final int TRUE = 59;
@@ -52,11 +52,11 @@ public class sym {
   public static final int PROGRAM = 2;
   public static final int MOD = 36;
   public static final int EQ = 56;
-  public static final int REAL = 64;
+  public static final int REAL = 61;
   public static final int COLON = 13;
   public static final int CLOSE_CURLY_BRACKETS = 19;
   public static final int ELSE = 28;
-  public static final int TYPE_INTEGER = 62;
+  public static final int TYPE_INTEGER = 64;
   public static final int TO = 47;
   public static final int FILE = 29;
   public static final int GOTO = 32;
@@ -64,7 +64,7 @@ public class sym {
   public static final int THEN = 46;
   public static final int END = 4;
   public static final int CLOSE_BRACKETS = 17;
-  public static final int STRING = 63;
+  public static final int STRING = 66;
   public static final int DOWNTO = 27;
   public static final int FALSE = 60;
   public static final int LABEL = 35;
@@ -75,7 +75,7 @@ public class sym {
   public static final int PROCEDURE = 42;
   public static final int DO = 26;
   public static final int SET = 45;
-  public static final int IDENTIFIER = 66;
+  public static final int IDENTIFIER = 63;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -138,12 +138,12 @@ public class sym {
   "LT",
   "TRUE",
   "FALSE",
-  "BOOLEAN",
-  "TYPE_INTEGER",
-  "STRING",
   "REAL",
   "STRING_LITERAL",
   "IDENTIFIER",
+  "TYPE_INTEGER",
+  "BOOLEAN",
+  "STRING",
   "INTEGER"
   };
 }
