@@ -94,20 +94,20 @@ String_Literal = '.*'
 "var"                  		{ return symbol(sym.VAR); }
 "while"                  	{ return symbol(sym.WHILE); }
 "with"                  	{ return symbol(sym.WITH); }
-{Integer}                   { return symbol(sym.INTEGER); }
+{Integer}                   { return symbol(sym.INTEGER, yytext()); }
 ">="                        { return symbol(sym.GE); }
 "<="                        { return symbol(sym.LE); }
 ">"                         { return symbol(sym.GT); }
 "<"                         { return symbol(sym.LT); }
-"true"						{ return symbol(sym.TRUE);}
-"false"						{ return symbol(sym.FALSE);}
-"boolean"                   { return symbol(sym.BOOLEAN);}
-"integer"                   { return symbol(sym.TYPE_INTEGER);}
-"string"                    { return symbol(sym.STRING); }
+"true"						{ return symbol(sym.TRUE, yytext());}
+"false"						{ return symbol(sym.FALSE, yytext());}
+"boolean"                   { return symbol(sym.BOOLEAN, yytext());}
+"integer"                   { return symbol(sym.TYPE_INTEGER, yytext());}
+"string"                    { return symbol(sym.STRING, yytext()); }
 "real"                      { return symbol(sym.REAL); }
 {brancos}					{/* Nao faz nada */}
 {ID}                        { return symbol(sym.IDENTIFIER, yytext()); }
-{String_Literal}			{ return symbol(sym.STRING_LITERAL); }
+{String_Literal}			{ return symbol(sym.STRING_LITERAL, yytext()); }
 <<EOF>> 					{ return symbol(sym.EOF); }
 "<>"						{ return symbol(sym.UQ); }
 

@@ -6,7 +6,7 @@ import java.io.*;
 
 action code {:
  Hashtable<String, String> type = new Hashtable();
- Hashtable value = new Hashtable();
+ Hashtable<String, String> value = new Hashtable();
  
  
  
@@ -46,9 +46,9 @@ parser code {:
 	public boolean typeCheckAritimetico(String op , Exp e1 , Exp e2){
 			
 			if(e1.type.equals(e2.type)){
-				if(e1.type.equals("integer")){
+				if(e1.type.equalsIgnoreCase("integer")){
 				 return true;}
-				if(e1.type.equals("string")) {
+				if(e1.type.equalsIgnoreCase("string")) {
 					if(op.equals("+")){
 						return true;
 					}
@@ -66,7 +66,7 @@ parser code {:
 		if(op == "=" || op == "<>"){
 			return true;
 		}
-		if(e1.type.equals(e2.type)){
+		if(e1.type.equalsIgnoreCase(e2.type)){
 			return true;
 		}
 		else{
@@ -258,7 +258,7 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   else {
 						    report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);
 						   }:}
-						   |term_declaration:e1 {:RESULT = e1;:};
+						   |term_declaration:e1 {: RESULT = e1;:};
 
 
 op_relational_declaration ::= EQ {:RESULT = "=";:} 
@@ -275,7 +275,7 @@ op_aritimetical_declaration ::= PLUS {:RESULT = "+";:}
 
 
 term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESES  {:RESULT = e1;:}
-					 | INTEGER:i {:Exp e = new Exp("integer",i);
+					 | INTEGER:i {: Exp e = new Exp("integer",i);
 					 RESULT = e;:}
 					 | IDENTIFIER:id {:Exp e = new Exp(type.get(id),id);
 					 RESULT = e;:}
@@ -290,7 +290,7 @@ term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESE
 
 assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEMICOLON{:
 	if(type.get(id) != null){
-		if(type.get(id).equals(e.type)){
+		if(type.get(id).equalsIgnoreCase(e.type)){
 				value.put(id,e.code);
 		}
 		

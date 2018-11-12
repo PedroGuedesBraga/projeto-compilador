@@ -1,8 +1,9 @@
 Program NomeDOProgra;
 var b, c : integer;
 var a : integer;
+var x : Boolean;
 begin
-a := 8 + 7;
-b := 5 < 3;
+x := True;
+a := 8;
 c := 7 + 10;
 end.
