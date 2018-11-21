@@ -1,9 +1,10 @@
 Program NomeDOProgra;
 var b, c : integer;
 var a : integer;
-var x : set of integer;
+var x, y : set of integer;
 begin
 a := 8 + 7;
 b := 5 - 3;
 c := 7 + 10;
+
 end.

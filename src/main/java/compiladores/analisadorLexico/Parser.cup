@@ -191,8 +191,13 @@ list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!typ
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
 																	 } :}
 						| 
-						IDENTIFIER COLON SET OF type_declaration 
-						;
+						IDENTIFIER:id COLON SET OF type_declaration:tipo  {:if(!type.containsKey(id)){
+																  			type.put(id, (String) tipo);
+																  			RESULT = tipo;
+																  }else{
+																  		report_fatal_error("Variavel ja foi declarada: " + id, id);
+																  } :}
+																  ;
 						
 optional_var ::= VAR | ;
 				
@@ -263,7 +268,7 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						    report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);
 						   }:}
 						   |term_declaration:e1 {:RESULT = e1;:}
-						   |expression_declaration set_op_declaration set_declaration
+						   |expression_declaration set_op_declaration set_declaration 
 						   |set_declaration
 						   ;
 
