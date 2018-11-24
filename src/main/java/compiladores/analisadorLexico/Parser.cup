@@ -19,13 +19,21 @@ parser code {:
   class Exp {
 	    public String type;
 	    public String code;
+		public Boolean isSet;
 	    
 
 	    public Exp(String t, String code) {
   		  this.type = t;
   		  this.code = code;
+		  this.isSet = false;
 	    }
-	  
+
+		
+		public Exp(String t, String code,Boolean isSet) {
+  		  this.type = t;
+  		  this.code = code;
+		  this.isSet = isSet;
+	    }
 	}
 
 
@@ -73,6 +81,8 @@ parser code {:
 			return false;
 		}
 	}
+
+	public boolean isset
 
 :};
 
@@ -268,8 +278,17 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						    report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);
 						   }:}
 						   |term_declaration:e1 {:RESULT = e1;:}
-						   |expression_declaration set_op_declaration set_declaration 
-						   |set_declaration
+						   |expression_declaration:e1 set_op_declaration:op set_declaration:e2{:
+						   if(e1.isSet &&e2.isSet){
+							   if(e1.type.equals(e2.type)){
+								   RESULT = new Exp(e1.type,e1.code + op +e2.code,true);
+							   }
+							   else {report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);}
+						   }
+						   else { report_fatal_error("set não pode ser operado com "+e1.code , e1);}
+						   
+						   :}
+						   |set_declaration:s {:RESULT = s;:}
 						   ;
 
 
@@ -285,11 +304,16 @@ op_aritimetical_declaration ::= PLUS {:RESULT = "+";:}
 								| MULT {:RESULT = "*";:}
 								| DIV {:RESULT = "/";:};
 
-set_declaration ::= OPEN_BRACKETS set_body
-		    		|OPEN_BRACKETS CLOSE_BRACKETS;
+set_declaration ::= OPEN_BRACKETS set_body:s {:RESULT = new Exp(s.type,OPEN_BRACKETS + s.code,true):}
+		    		|OPEN_BRACKETS CLOSE_BRACKETS {:RESULT = new Exp(null,OPEN_BRACKETS + CLOSE_BRACKETS,true):};
 		    		
-set_body ::= term_declaration COMMA set_body
-			|term_declaration CLOSE_BRACKETS;
+set_body ::= term_declaration:t COMMA set_body:s {:if(t.type.equals(s.type)){
+								 RESULT = new Exp (t.type, t.code + COMMA + s.code)
+								}
+								else {report_fatal_error("Um set não pode conter dois elemnentos de tipos diferentes");}
+								:}
+			|term_declaration:t CLOSE_BRACKETS{:RESULT = new Exp(t.type,t.code+CLOSE_BRACKETS)
+			:};
 
 term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESES  {:RESULT = e1;:}
 					 | INTEGER:i {:Exp e = new Exp("integer",i);
@@ -321,6 +345,8 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 		if(type.get(id).equals(e.type)){
 				value.put(id,e.code);
 		}
+
+		if(e.type == null){value.put(id,e.code);}
 		
 		else{ report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, id); }
 		
@@ -333,8 +359,10 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 	
 :};
 
-/*------------------------------------------DECLARACAO DE SETS------------------------------------------------*/
+/*------------------------------------------DECLARACAO De while------------------------------------------------*/
 
-
+while ::= WHILE expression_declaration:e DO BEGIN program_block END SEMICOLON{:if(e.type.equals("Boolean")==false){
+	report_fatal_error("Condição de parada não é uma expressão boleana");
+}:};
 
 
