@@ -1,9 +1,11 @@
 Program NomeDOProgra;
 var b, c : integer;
 var a : integer;
+
 var x, y : set of integer;
 begin
 a := 8;
+
 
 
 end.

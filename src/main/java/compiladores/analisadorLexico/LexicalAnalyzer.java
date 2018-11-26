@@ -910,7 +910,7 @@ private Symbol symbol(int type, Object value) {
             }
           case 72: break;
           case 3: 
-            { return symbol(sym.INTEGER);
+            { return symbol(sym.INTEGER, yytext());
             }
           case 73: break;
           case 4: 
@@ -990,7 +990,7 @@ private Symbol symbol(int type, Object value) {
             }
           case 92: break;
           case 23: 
-            { return symbol(sym.STRING_LITERAL);
+            { return symbol(sym.STRING_LITERAL, yytext());
             }
           case 93: break;
           case 24: 
@@ -1086,7 +1086,8 @@ private Symbol symbol(int type, Object value) {
             }
           case 116: break;
           case 47: 
-            { return symbol(sym.CASE);
+
+            { return symbol(sym.TRUE, yytext());          
             }
           case 117: break;
           case 48: 
@@ -1126,7 +1127,9 @@ private Symbol symbol(int type, Object value) {
             }
           case 126: break;
           case 57: 
-            { return symbol(sym.LABEL);
+
+            
+            { return symbol(sym.FALSE, yytext());
             }
           case 127: break;
           case 58: 
@@ -1150,7 +1153,8 @@ private Symbol symbol(int type, Object value) {
             }
           case 132: break;
           case 63: 
-            { return symbol(sym.DOWNTO);
+
+            { return symbol(sym.STRING, yytext());
             }
           case 133: break;
           case 64: 
@@ -1158,11 +1162,12 @@ private Symbol symbol(int type, Object value) {
             }
           case 134: break;
           case 65: 
-            { return symbol(sym.PROGRAM);
+
+            { return symbol(sym.BOOLEAN, yytext());
             }
           case 135: break;
           case 66: 
-            { return symbol(sym.BOOLEAN);
+            { return symbol(sym.TYPE_INTEGER, yytext());
             }
           case 136: break;
           case 67: 

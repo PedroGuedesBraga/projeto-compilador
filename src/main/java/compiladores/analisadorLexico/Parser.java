@@ -316,9 +316,9 @@ public class Parser extends java_cup.runtime.lr_parser {
 	public boolean typeCheckAritimetico(String op , Exp e1 , Exp e2){
 			
 			if(e1.type.equals(e2.type)){
-				if(e1.type.equals("integer")){
+				if(e1.type.equalsIgnoreCase("integer")){
 				 return true;}
-				if(e1.type.equals("string")) {
+				if(e1.type.equalsIgnoreCase("string")) {
 					if(op.equals("+")){
 						return true;
 					}
@@ -336,7 +336,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 		if(op == "=" || op == "<>"){
 			return true;
 		}
-		if(e1.type.equals(e2.type)){
+		if(e1.type.equalsIgnoreCase(e2.type)){
 			return true;
 		}
 		else{
@@ -354,7 +354,7 @@ class CUP$Parser$actions {
 
 
  Hashtable<String, String> type = new Hashtable();
- Hashtable value = new Hashtable();
+ Hashtable<String, String> value = new Hashtable();
  
  
  
@@ -823,6 +823,7 @@ class CUP$Parser$actions {
 		int e1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int e1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Exp e1 = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+
 		RESULT = e1;
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -854,6 +855,7 @@ class CUP$Parser$actions {
 						   
 						   
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+
             }
           return CUP$Parser$result;
 
@@ -1033,7 +1035,7 @@ class CUP$Parser$actions {
 		int ileft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		Exp e = new Exp("integer",i);
+		 Exp e = new Exp("integer",i);
 					 RESULT = e;
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("term_declaration",28, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1193,7 +1195,7 @@ class CUP$Parser$actions {
 		Exp e = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		
 	if(type.get(id) != null){
-		if(type.get(id).equals(e.type)){
+		if(type.get(id).equalsIgnoreCase(e.type)){
 				value.put(id,e.code);
 		}
 
