@@ -120,11 +120,14 @@ procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesi
 arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
 function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
 function_arguments, function_declaration_aux, function_local_declarations,assignment_declaration, program_block,
-set_op_declaration, set_declaration, set_body;
+set_op_declaration;
 non terminal Exp expression_declaration;
 non terminal String op_aritimetical_declaration;
 non terminal String op_relational_declaration;
 non terminal Exp term_declaration;
+non terminal Exp set_declaration;
+non terminal Exp set_body;
+
 
 
 
@@ -306,15 +309,15 @@ op_aritimetical_declaration ::= PLUS {:RESULT = "+";:}
 								| MULT {:RESULT = "*";:}
 								| DIV {:RESULT = "/";:};
 
-set_declaration ::= OPEN_BRACKETS set_body:s {:Exp e = new Exp(s.type,OPEN_BRACKETS + s.code,true);
+set_declaration ::= OPEN_BRACKETS set_body:s {:Exp e = new Exp(s.type,"[" + s.code,true);
 											 RESULT = e;:}
-		    		|OPEN_BRACKETS CLOSE_BRACKETS {:Exp e = new Exp(null,OPEN_BRACKETS + CLOSE_BRACKETS,true);
+		    		|OPEN_BRACKETS CLOSE_BRACKETS {:Exp e = new Exp(null,"[" + "]",true);
 		    									   RESULT = e;:};
 		    		
 set_body ::= term_declaration:t COMMA set_body:s {:if(t.type.equals(s.type)){
 								 RESULT = new Exp(t.type, t.code + "," + s.code);
 								}
-								else {report_fatal_error("Um set não pode conter dois elemnentos de tipos diferentes");}
+								else {report_fatal_error("Um set não pode conter dois elementos de tipos diferentes", null);}
 								:}
 			|term_declaration:t CLOSE_BRACKETS{:RESULT = new Exp(t.type,t.code+"]");
 			:};
@@ -328,7 +331,7 @@ term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESE
 					 RESULT = e;:}
 					 | FALSE:f {:Exp e = new Exp("Boolean",f);
 					 RESULT = e;:}
-					 | STRING_LITERAL:s{:Exp e = new Exp("string",s);
+					 | STRING_LITERAL:s {:Exp e = new Exp("string",s);
 					 RESULT = e;:};
 
 set_op_declaration ::= PLUS 
@@ -350,7 +353,7 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 				value.put(id,e.code);
 		}
 
-		if(e.type == null){value.put(id,e.code);}
+		else if(e.type == null){value.put(id,e.code);}
 		
 		else{ report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, id); }
 		
