@@ -1,9 +1,11 @@
 Program NomeDOProgra;
 var b, c : integer;
 var a : integer;
-var x : Boolean;
+
+var x, y : set of integer;
 begin
-x := True;
 a := 8;
-c := 7 + 10;
+
+
+
 end.

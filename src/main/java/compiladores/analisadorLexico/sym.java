@@ -9,25 +9,25 @@ package compiladores.analisadorLexico;
 public class sym {
   /* terminals */
   public static final int INTEGER_DIV = 21;
-  public static final int STRING_LITERAL = 51;
+  public static final int STRING_LITERAL = 54;
   public static final int FUNCTION = 27;
-  public static final int MULT = 66;
+  public static final int MULT = 69;
   public static final int WITH = 48;
   public static final int PACKED = 37;
   public static final int CONST = 20;
-  public static final int GE = 60;
+  public static final int GE = 63;
   public static final int ASSIGNMENT = 5;
   public static final int CASE = 19;
-  public static final int INTEGER = 53;
+  public static final int INTEGER = 56;
   public static final int CLOSE_PARENTHESES = 11;
   public static final int REPEAT = 40;
   public static final int ARRAY = 18;
-  public static final int MINUS = 65;
+  public static final int MINUS = 68;
   public static final int FOR = 26;
   public static final int NOT = 34;
   public static final int SEMICOLON = 8;
   public static final int AND = 17;
-  public static final int LT = 63;
+  public static final int LT = 66;
   public static final int RECORD = 39;
   public static final int TYPE = 44;
   public static final int NIL = 33;
@@ -35,24 +35,26 @@ public class sym {
   public static final int IN = 30;
   public static final int OPEN_BRACKETS = 12;
   public static final int COMMA = 6;
-  public static final int DIV = 67;
+  public static final int DIV = 70;
   public static final int BEGIN = 3;
-  public static final int UQ = 59;
+  public static final int UQ = 62;
   public static final int UNTIL = 45;
-  public static final int PLUS = 64;
+  public static final int PLUS = 67;
   public static final int IF = 29;
   public static final int DOT = 7;
-  public static final int LE = 62;
+  public static final int LE = 65;
   public static final int OF = 35;
-  public static final int BOOLEAN = 57;
+  public static final int BOOLEAN = 60;
   public static final int CRASIS = 16;
   public static final int EOF = 0;
-  public static final int TRUE = 54;
+  public static final int TRUE = 57;
   public static final int error = 1;
   public static final int PROGRAM = 2;
+  public static final int INCLUDE = 52;
   public static final int MOD = 32;
-  public static final int EQ = 61;
+  public static final int EQ = 64;
   public static final int REAL = 50;
+  public static final int EXCLUDE = 53;
   public static final int COLON = 9;
   public static final int CLOSE_CURLY_BRACKETS = 15;
   public static final int ELSE = 24;
@@ -64,18 +66,19 @@ public class sym {
   public static final int THEN = 42;
   public static final int END = 4;
   public static final int CLOSE_BRACKETS = 13;
-  public static final int STRING = 56;
+  public static final int STRING = 59;
   public static final int DOWNTO = 23;
-  public static final int FALSE = 55;
+  public static final int FALSE = 58;
   public static final int LABEL = 31;
   public static final int OPEN_CURLY_BRACKETS = 14;
-  public static final int GT = 58;
+  public static final int GT = 61;
+  public static final int SYMDIFF = 51;
   public static final int OPEN_PARENTHESES = 10;
   public static final int VAR = 46;
   public static final int PROCEDURE = 38;
   public static final int DO = 22;
   public static final int SET = 41;
-  public static final int IDENTIFIER = 52;
+  public static final int IDENTIFIER = 55;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -128,6 +131,9 @@ public class sym {
   "WITH",
   "TYPE_INTEGER",
   "REAL",
+  "SYMDIFF",
+  "INCLUDE",
+  "EXCLUDE",
   "STRING_LITERAL",
   "IDENTIFIER",
   "INTEGER",
