@@ -278,7 +278,7 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   		RESULT = e;
 						   }
 						   else {
-						    report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);
+						    report_fatal_error("Não se pode operar " + e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);
 						   }:}
 						   |term_declaration:e1 {:RESULT = e1;:}
 						   |expression_declaration:e1 set_op_declaration:op set_declaration:e2{:
@@ -288,7 +288,7 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 								   Exp e = new Exp(e1.type,e1.code + op +e2.code,true);
 								   RESULT = e;
 							   }
-							   else {report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);}
+							   else {report_fatal_error("Não se pode operar " + e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);}
 						   }
 						   else { report_fatal_error("set não pode ser operado com "+e1.code , e1);}
 						   
