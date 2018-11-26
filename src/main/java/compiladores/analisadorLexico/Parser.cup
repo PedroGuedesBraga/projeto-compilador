@@ -82,7 +82,7 @@ parser code {:
 		}
 	}
 
-	public boolean isset
+	public boolean isset;
 
 :};
 
@@ -279,9 +279,11 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   }:}
 						   |term_declaration:e1 {:RESULT = e1;:}
 						   |expression_declaration:e1 set_op_declaration:op set_declaration:e2{:
+						  
 						   if(e1.isSet &&e2.isSet){
 							   if(e1.type.equals(e2.type)){
-								   RESULT = new Exp(e1.type,e1.code + op +e2.code,true);
+								   Exp e = new Exp(e1.type,e1.code + op +e2.code,true);
+								   RESULT = e;
 							   }
 							   else {report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);}
 						   }
@@ -304,15 +306,17 @@ op_aritimetical_declaration ::= PLUS {:RESULT = "+";:}
 								| MULT {:RESULT = "*";:}
 								| DIV {:RESULT = "/";:};
 
-set_declaration ::= OPEN_BRACKETS set_body:s {:RESULT = new Exp(s.type,OPEN_BRACKETS + s.code,true):}
-		    		|OPEN_BRACKETS CLOSE_BRACKETS {:RESULT = new Exp(null,OPEN_BRACKETS + CLOSE_BRACKETS,true):};
+set_declaration ::= OPEN_BRACKETS set_body:s {:Exp e = new Exp(s.type,OPEN_BRACKETS + s.code,true);
+											 RESULT = e;:}
+		    		|OPEN_BRACKETS CLOSE_BRACKETS {:Exp e = new Exp(null,OPEN_BRACKETS + CLOSE_BRACKETS,true);
+		    									   RESULT = e;:};
 		    		
 set_body ::= term_declaration:t COMMA set_body:s {:if(t.type.equals(s.type)){
-								 RESULT = new Exp (t.type, t.code + COMMA + s.code)
+								 RESULT = new Exp(t.type, t.code + "," + s.code);
 								}
 								else {report_fatal_error("Um set não pode conter dois elemnentos de tipos diferentes");}
 								:}
-			|term_declaration:t CLOSE_BRACKETS{:RESULT = new Exp(t.type,t.code+CLOSE_BRACKETS)
+			|term_declaration:t CLOSE_BRACKETS{:RESULT = new Exp(t.type,t.code+"]");
 			:};
 
 term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESES  {:RESULT = e1;:}

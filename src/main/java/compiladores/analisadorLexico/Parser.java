@@ -281,13 +281,21 @@ public class Parser extends java_cup.runtime.lr_parser {
   class Exp {
 	    public String type;
 	    public String code;
+		public Boolean isSet;
 	    
 
 	    public Exp(String t, String code) {
   		  this.type = t;
   		  this.code = code;
+		  this.isSet = false;
 	    }
-	  
+
+		
+		public Exp(String t, String code,Boolean isSet) {
+  		  this.type = t;
+  		  this.code = code;
+		  this.isSet = isSet;
+	    }
 	}
 
 
@@ -335,6 +343,8 @@ public class Parser extends java_cup.runtime.lr_parser {
 			return false;
 		}
 	}
+
+	public boolean isset;
 
 
 
@@ -581,7 +591,18 @@ class CUP$Parser$actions {
           case 20: // list_of_identifiers ::= IDENTIFIER COLON SET OF type_declaration 
             {
               Object RESULT =null;
-
+		int idleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		if(!type.containsKey(id)){
+																  			type.put(id, (String) tipo);
+																  			RESULT = tipo;
+																  }else{
+																  		report_fatal_error("Variavel ja foi declarada: " + id, id);
+																  } 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("list_of_identifiers",14, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -811,7 +832,27 @@ class CUP$Parser$actions {
           case 42: // expression_declaration ::= expression_declaration set_op_declaration set_declaration 
             {
               Exp RESULT =null;
-
+		int e1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		Exp e1 = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Object op = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		
+						  
+						   if(e1.isSet &&e2.isSet){
+							   if(e1.type.equals(e2.type)){
+								   Exp e = new Exp(e1.type,e1.code + op +e2.code,true);
+								   RESULT = e;
+							   }
+							   else {report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);}
+						   }
+						   else { report_fatal_error("set não pode ser operado com "+e1.code , e1);}
+						   
+						   
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",27, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -820,7 +861,10 @@ class CUP$Parser$actions {
           case 43: // expression_declaration ::= set_declaration 
             {
               Exp RESULT =null;
-
+		int sleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object s = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		RESULT = s;
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",27, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -919,7 +963,11 @@ class CUP$Parser$actions {
           case 54: // set_declaration ::= OPEN_BRACKETS set_body 
             {
               Object RESULT =null;
-
+		int sleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object s = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		Exp e = new Exp(s.type,OPEN_BRACKETS + s.code,true);
+											 RESULT = e;
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("set_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -928,7 +976,8 @@ class CUP$Parser$actions {
           case 55: // set_declaration ::= OPEN_BRACKETS CLOSE_BRACKETS 
             {
               Object RESULT =null;
-
+		Exp e = new Exp(null,OPEN_BRACKETS + CLOSE_BRACKETS,true);
+		    									   RESULT = e;
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("set_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -937,7 +986,17 @@ class CUP$Parser$actions {
           case 56: // set_body ::= term_declaration COMMA set_body 
             {
               Object RESULT =null;
-
+		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		Exp t = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int sleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object s = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		if(t.type.equals(s.type)){
+								 RESULT = new Exp(t.type, t.code + "," + s.code);
+								}
+								else {report_fatal_error("Um set não pode conter dois elemnentos de tipos diferentes");}
+								
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("set_body",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -946,7 +1005,11 @@ class CUP$Parser$actions {
           case 57: // set_body ::= term_declaration CLOSE_BRACKETS 
             {
               Object RESULT =null;
-
+		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Exp t = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		RESULT = new Exp(t.type,t.code+CLOSE_BRACKETS);
+			
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("set_body",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1133,6 +1196,8 @@ class CUP$Parser$actions {
 		if(type.get(id).equals(e.type)){
 				value.put(id,e.code);
 		}
+
+		if(e.type == null){value.put(id,e.code);}
 		
 		else{ report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, id); }
 		
