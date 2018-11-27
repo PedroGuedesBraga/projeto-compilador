@@ -356,6 +356,9 @@ class CUP$Parser$actions {
  Hashtable<String, String> type = new Hashtable();
  Hashtable<String, String> value = new Hashtable();
  
+ //Esse conjunto tem os identificadores para sets.
+Set<String> setIdentifiers = new TreeSet<String>();
+ 
  
  
 
@@ -599,7 +602,10 @@ class CUP$Parser$actions {
 		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		if(!type.containsKey(id)){
 																  			type.put(id, (String) tipo);
+																  			setIdentifiers.add(id);
 																  			RESULT = tipo;
+																  			
+																  			
 																  }else{
 																  		report_fatal_error("Variavel ja foi declarada: " + id, id);
 																  } 
@@ -810,7 +816,7 @@ class CUP$Parser$actions {
 						   		RESULT = e;
 						   }
 						   else {
-						    report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);
+						    report_fatal_error("Não se pode operar " + e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);
 						   }
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -823,7 +829,6 @@ class CUP$Parser$actions {
 		int e1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int e1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Exp e1 = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-
 		RESULT = e1;
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -849,13 +854,12 @@ class CUP$Parser$actions {
 								   Exp e = new Exp(e1.type,e1.code + op +e2.code,true);
 								   RESULT = e;
 							   }
-							   else {report_fatal_error("Não se pode operar " + e1.type+":"+e1.code+ " com "+e2.type+":"+e2.code, e1);}
+							   else {report_fatal_error("Não se pode operar " + e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);}
 						   }
 						   else { report_fatal_error("set não pode ser operado com "+e1.code , e1);}
 						   
 						   
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression_declaration",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
-
             }
           return CUP$Parser$result;
 
@@ -1195,16 +1199,32 @@ class CUP$Parser$actions {
 		Exp e = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		
 	if(type.get(id) != null){
-		if(type.get(id).equalsIgnoreCase(e.type)){
+		if(!e.isSet && !setIdentifiers.contains(id) && type.get(id).equalsIgnoreCase(e.type)){
 				value.put(id,e.code);
+		}
+		else if(e.isSet && setIdentifiers.contains(id)){
+			if(e.type.equalsIgnoreCase(type.get(id))){
+				value.put(id, e.code);
+			}
+			else{
+				report_fatal_error("A variavel do tipo set of " + type.get(id) + " nao pode ser associada a um set of " +  e.type, null);
+			}
 		}
 
 		else if(e.type == null){value.put(id,e.code);}
 		
-		else{ report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, id); }
-		
+		else{ 
+			if(!setIdentifiers.contains(id) && !e.isSet) {
+				report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, null); 			
+			}
+			else if (!setIdentifiers.contains(id) && e.isSet){
+				report_fatal_error("A variavel: " + id + " não é um set!", null); 
+			}
+			else if (setIdentifiers.contains(id) && !e.isSet){
+				report_fatal_error("O valor atribuido a variavel: " + id + " não é um set!", null); 
+			}
+		}
 	}
-	
 	else {
 	report_fatal_error("Variavel nao foi declarada anteriormente " + id, id);
 	}

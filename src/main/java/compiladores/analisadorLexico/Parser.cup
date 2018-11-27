@@ -8,6 +8,9 @@ action code {:
  Hashtable<String, String> type = new Hashtable();
  Hashtable<String, String> value = new Hashtable();
  
+ //Esse conjunto tem os identificadores para sets.
+Set<String> setIdentifiers = new TreeSet<String>();
+ 
  
  
 :};
@@ -206,7 +209,10 @@ list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!typ
 						| 
 						IDENTIFIER:id COLON SET OF type_declaration:tipo  {:if(!type.containsKey(id)){
 																  			type.put(id, (String) tipo);
+																  			setIdentifiers.add(id);
 																  			RESULT = tipo;
+																  			
+																  			
 																  }else{
 																  		report_fatal_error("Variavel ja foi declarada: " + id, id);
 																  } :}
@@ -350,16 +356,32 @@ set_op_declaration ::= PLUS
 
 assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEMICOLON{:
 	if(type.get(id) != null){
-		if(type.get(id).equalsIgnoreCase(e.type)){
+		if(!e.isSet && !setIdentifiers.contains(id) && type.get(id).equalsIgnoreCase(e.type)){
 				value.put(id,e.code);
+		}
+		else if(e.isSet && setIdentifiers.contains(id)){
+			if(e.type.equalsIgnoreCase(type.get(id))){
+				value.put(id, e.code);
+			}
+			else{
+				report_fatal_error("A variavel do tipo set of " + type.get(id) + " nao pode ser associada a um set of " +  e.type, null);
+			}
 		}
 
 		else if(e.type == null){value.put(id,e.code);}
 		
-		else{ report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, id); }
-		
+		else{ 
+			if(!setIdentifiers.contains(id) && !e.isSet) {
+				report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, null); 			
+			}
+			else if (!setIdentifiers.contains(id) && e.isSet){
+				report_fatal_error("A variavel: " + id + " não é um set!", null); 
+			}
+			else if (setIdentifiers.contains(id) && !e.isSet){
+				report_fatal_error("O valor atribuido a variavel: " + id + " não é um set!", null); 
+			}
+		}
 	}
-	
 	else {
 	report_fatal_error("Variavel nao foi declarada anteriormente " + id, id);
 	}
