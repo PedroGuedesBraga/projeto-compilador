@@ -1,9 +1,14 @@
 Program NomeDOProgra;
-var b, c : integer;
-var a : set of boolean;
+var b, c : set of String;
+var a : set of strIng;
 
 begin
-a := true;
+
+while a > b do 
+begin 
+
+end;
+
 
 
 

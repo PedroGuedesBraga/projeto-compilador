@@ -55,10 +55,14 @@ parser code {:
 	}
 	
 	public boolean typeCheckAritimetico(String op , Exp e1 , Exp e2){
+			if(e1.isSet || e2.isSet){
+				return false;
+			}
 			
 			if(e1.type.equals(e2.type)){
 				if(e1.type.equalsIgnoreCase("integer")){
-				 return true;}
+				 return true;
+				 }
 				if(e1.type.equalsIgnoreCase("string")) {
 					if(op.equals("+")){
 						return true;
@@ -77,6 +81,11 @@ parser code {:
 		if(op == "=" || op == "<>"){
 			return true;
 		}
+		
+		if(((!e1.isSet) && (e2.isSet)) || (e1.isSet && !e2.isSet)){
+			return false;
+		}
+		
 		if(e1.type.equalsIgnoreCase(e2.type)){
 			return true;
 		}
@@ -123,7 +132,7 @@ procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesi
 arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
 function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
 function_arguments, function_declaration_aux, function_local_declarations,assignment_declaration, program_block,
-set_op_declaration;
+set_op_declaration, while, list_of_set_identifiers, list_of_non_set_identifiers;
 non terminal Exp expression_declaration;
 non terminal String op_aritimetical_declaration;
 non terminal String op_relational_declaration;
@@ -155,6 +164,8 @@ declarations ::= declarations constant_declaration1
 				 ; 
 				 
 program_block ::= program_block assignment_declaration 
+				  |
+				  program_block while
 				  |
 				  
 				  ;
@@ -192,8 +203,10 @@ arguments1 ::= optional_var list_of_identifiers SEMICOLON arguments1
 			   ;
 			   
 arguments2 ::= ;
-					  
-list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!type.containsKey(id)){
+
+list_of_identifiers ::= list_of_non_set_identifiers | list_of_set_identifiers;
+
+list_of_non_set_identifiers ::= IDENTIFIER:id COMMA list_of_non_set_identifiers:tipo {:  if(!type.containsKey(id)){
 																			type.put(id, (String) tipo);
 																	 		RESULT = tipo;
 																	 }else{
@@ -205,9 +218,20 @@ list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!typ
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
+																	 } :};
+																  																  
+																  
+																  
+//Regras de producao especificas para a declaracao de sets, usando recursao. Para poder "subir" com informacao de que eh set.
+
+list_of_set_identifiers ::= IDENTIFIER:id COMMA list_of_set_identifiers:tipo {:  if(!type.containsKey(id)){
+																			type.put(id, (String) tipo);
+																			setIdentifiers.add(id);
+																	 		RESULT = tipo;
+																	 }else{
+																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
 																	 } :}
-						| 
-						IDENTIFIER:id COLON SET OF type_declaration:tipo  {:if(!type.containsKey(id)){
+							| IDENTIFIER:id COLON SET OF type_declaration:tipo  {:if(!type.containsKey(id)){
 																  			type.put(id, (String) tipo);
 																  			setIdentifiers.add(id);
 																  			RESULT = tipo;
@@ -215,8 +239,7 @@ list_of_identifiers ::= IDENTIFIER:id COMMA list_of_identifiers:tipo {:  if(!typ
 																  			
 																  }else{
 																  		report_fatal_error("Variavel ja foi declarada: " + id, id);
-																  } :}
-																  ;
+																  } :};
 						
 optional_var ::= VAR | ;
 				
@@ -276,15 +299,24 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 								Exp e = new Exp("Boolean",e1.code+op+e2.code);
 								RESULT = e;
 							}
-							else{report_fatal_error("Não se pode operar " + e1.type+ " com "+e2.code, e1);}
+							
+							else{
+								String e1IsSet = (e1.isSet) ? "Set of " : "";
+								String e2IsSet = (e2.isSet) ? "Set of " : "";
+								report_fatal_error("Não se pode operar " + e1IsSet + e1.type+ " com "+ e2IsSet + e2.type, e1);
+							}
+							
 							:}
 						   |expression_declaration:e1 op_aritimetical_declaration:op term_declaration:e2
 						   {:if(typeCheckAritimetico(op ,e1 ,e2)){
 						   		Exp e = new Exp(e1.type,e1.code+op+e2.code);
 						   		RESULT = e;
+						   		System.out.println(e1.isSet + " ou " + e2.isSet);
 						   }
 						   else {
-						    report_fatal_error("Não se pode operar " + e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);
+						    String e1IsSet = (e1.isSet) ? "Set of " : "";
+							String e2IsSet = (e2.isSet) ? "Set of " : "";
+							report_fatal_error("Não se pode operar " + e1IsSet + e1.type+ " com "+ e2IsSet + e2.code, e1);
 						   }:}
 
 						   |term_declaration:e1 {:RESULT = e1;:}
@@ -295,9 +327,9 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 								   Exp e = new Exp(e1.type,e1.code + op +e2.code,true);
 								   RESULT = e;
 							   }
-							   else {report_fatal_error("Não se pode operar " + e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);}
+							   else {report_fatal_error("Não se pode operar dois sets de tipos diferentes: " +e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);}
 						   }
-						   else { report_fatal_error("set não pode ser operado com "+e1.code , e1);}
+						   else { report_fatal_error("A operacao nao ocorre entre dois sets!", e1);}
 						   
 						   :}
 						   |set_declaration:s {:RESULT = s;:}
@@ -332,7 +364,13 @@ set_body ::= term_declaration:t COMMA set_body:s {:if(t.type.equals(s.type)){
 term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESES  {:RESULT = e1;:}
 					 | INTEGER:i {: Exp e = new Exp("integer",i);
 					 RESULT = e;:}
-					 | IDENTIFIER:id {:Exp e = new Exp(type.get(id),id);
+					 | IDENTIFIER:id {:
+					 Exp e;
+					 if(setIdentifiers.contains(id)){
+					 	e = new Exp(type.get(id), id, true);
+					 }else{
+					 	e = new Exp(type.get(id),id);
+					 }
 					 RESULT = e;:}
 					 | TRUE:t  {:Exp e = new Exp("Boolean",t);
 					 RESULT = e;:}
@@ -356,6 +394,8 @@ set_op_declaration ::= PLUS
 
 assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEMICOLON{:
 	if(type.get(id) != null){
+		
+		
 		if(!e.isSet && !setIdentifiers.contains(id) && type.get(id).equalsIgnoreCase(e.type)){
 				value.put(id,e.code);
 		}
@@ -368,7 +408,10 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 			}
 		}
 
-		else if(e.type == null){value.put(id,e.code);}
+		else if(setIdentifiers.contains(id) && e.type == null){
+			value.put(id,e.code);
+		
+		}
 		
 		else{ 
 			if(!setIdentifiers.contains(id) && !e.isSet) {
@@ -391,8 +434,8 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 
 /*------------------------------------------DECLARACAO De while------------------------------------------------*/
 
-while ::= WHILE expression_declaration:e DO BEGIN program_block END SEMICOLON{:if(e.type.equals("Boolean")==false){
-	report_fatal_error("Condição de parada não é uma expressão boleana");
+while ::= WHILE expression_declaration:e DO BEGIN program_block END SEMICOLON{:if(e.type.equalsIgnoreCase("Boolean")==false){
+	report_fatal_error("Condição de parada não é uma expressão boleana", null);
 }:};
 
 
