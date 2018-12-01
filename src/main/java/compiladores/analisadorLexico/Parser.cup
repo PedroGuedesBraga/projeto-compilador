@@ -304,7 +304,7 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 							report_fatal_error("Não se pode operar " + e1IsSet + e1.type+ " com "+ e2IsSet + e2.code, e1);
 						   }:}
 
-						   |term_declaration:e1 {: gc.saveVar(e1);RESULT = e1;:}
+						   |term_declaration:e1 {:RESULT = e1;:}
 						   |expression_declaration:e1 set_op_declaration:op set_declaration:e2{:
 						  
 						   if(e1.isSet &&e2.isSet){

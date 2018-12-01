@@ -39,20 +39,35 @@ public class GeradorDeCodigo {
 	
 	// realiza operações
 	public void op (String op,String e1,String e2) {
-		int r1 = vars.get(e1).numero;		 // numero do registrador que contem o valor de e1
-		int r2 =  vars.get(e2).numero;      // numero do registrador que contem valor de e2
+		Registrador r1 = vars.get(e1);		 // numero do registrador que contem o valor de e1
+		Registrador r2 =  vars.get(e2);   // numero do registrador que contem valor de e2
+		
 		String operacao = selectOperator(op);
 		if(operacao != null) {
-			
+			if(r1 != null && r2 != null) {
 			instuctions.add(operacao + "," + "R"+regnum + " , " + "R" +vars.get(e1).numero+
-			" , R"+vars.get(e2).numero);
+			" , R"+vars.get(e2).numero);}
+			else if (r1 == null && r2 == null) {
+				instuctions.add(operacao + "," + "R"+regnum + " , " + "#"+e1+
+						" , #"+e2);
+			}
+			else if(r1 == null && r2 != null ) {
+				instuctions.add(operacao + "," + "R"+regnum + " , " + "#"+e1+
+						" , R"+r2.numero);
+			}
+			
+			else {
+				instuctions.add(operacao + "," + "R"+regnum + " , " + "#"+e2+
+						" , R"+r1.numero);
+			}
+			
 			System.out.println(instuctions.get(pc));
 			Registrador r =  new Registrador(e1+op+e2, regnum);
 			vars.put(e1+op+e2, r);
 			pc += 1;
 			regnum += 1;
 			
-		}
+		}}
 		
 	}
 	
