@@ -68,8 +68,8 @@ public class GeradorDeCodigo {
 			regnum += 1;
 			
 		}}
-		
-	}
+	
+	
 	
 	
 	public String selectOperator(String op) {
