@@ -293,6 +293,7 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 							:}
 						   |expression_declaration:e1 op_aritimetical_declaration:op term_declaration:e2
 						   {:if(typeCheckAritimetico(op ,e1 ,e2)){
+						   		gc.op(op,e1.code,e2.code);
 						   		Exp e = new Exp(e1.type,e1.code+op+e2.code);
 						   		RESULT = e;
 						   		System.out.println(e1.isSet + " ou " + e2.isSet);
@@ -303,7 +304,7 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 							report_fatal_error("Não se pode operar " + e1IsSet + e1.type+ " com "+ e2IsSet + e2.code, e1);
 						   }:}
 
-						   |term_declaration:e1 {:RESULT = e1;:}
+						   |term_declaration:e1 {: gc.saveVar(e1);RESULT = e1;:}
 						   |expression_declaration:e1 set_op_declaration:op set_declaration:e2{:
 						  
 						   if(e1.isSet &&e2.isSet){
