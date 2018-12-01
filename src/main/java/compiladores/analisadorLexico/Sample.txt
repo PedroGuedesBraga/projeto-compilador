@@ -1,11 +1,13 @@
 Program NomeDOProgra;
 var b, c : set of String;
 var a : set of strIng;
+var x: integer;
 
 begin
 
 while a > b do 
 begin 
+	x:= 5;
 
 end;
 

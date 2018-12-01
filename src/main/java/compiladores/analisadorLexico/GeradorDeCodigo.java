@@ -22,7 +22,7 @@ public class GeradorDeCodigo {
 	
 	// coloca uma variavel em um registrador
 	public void saveVar(String id) {
-		        
+		      
 				Registrador reg =  new Registrador(id, regnum);
                  vars.put(id, reg);
                  instuctions.add("LD, R"+regnum +" " + id);

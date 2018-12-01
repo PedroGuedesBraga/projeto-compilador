@@ -9,6 +9,7 @@ import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
 import compiladores.analisadorLexico.Exp;
+import compiladores.analisadorLexico.GeradorDeCodigo;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20141204 (SVN rev 60) generated parser.
@@ -364,6 +365,7 @@ class CUP$Parser$actions {
 
  Hashtable<String, String> type = new Hashtable();
  Hashtable<String, String> value = new Hashtable();
+ GeradorDeCodigo gc = new GeradorDeCodigo();
  
  //Esse conjunto tem os identificadores para sets.
 Set<String> setIdentifiers = new TreeSet<String>();
@@ -598,6 +600,7 @@ Set<String> setIdentifiers = new TreeSet<String>();
 		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		  if(!type.containsKey(id)){
 																			type.put(id, (String) tipo);
+																			this.gc.saveVar(id);
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
@@ -618,6 +621,7 @@ Set<String> setIdentifiers = new TreeSet<String>();
 		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 if(!type.containsKey(id)){
 																			type.put(id, (String) tipo);
+																			this.gc.saveVar(id);
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	

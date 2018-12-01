@@ -198,6 +198,7 @@ list_of_non_set_identifiers ::= IDENTIFIER:id COMMA list_of_non_set_identifiers:
 						| 
 						IDENTIFIER:id COLON type_declaration:tipo {: if(!type.containsKey(id)){
 																			type.put(id, (String) tipo);
+																			this.gc.saveVar(id);
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
