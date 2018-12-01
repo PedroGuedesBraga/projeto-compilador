@@ -4,10 +4,12 @@ import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
 import compiladores.analisadorLexico.Exp;
+import compiladores.analisadorLexico.GeradorDeCodigo;
 
 action code {:
  Hashtable<String, String> type = new Hashtable();
  Hashtable<String, String> value = new Hashtable();
+ GeradorDeCodigo gc = new GeradorDeCodigo();
  
  //Esse conjunto tem os identificadores para sets.
 Set<String> setIdentifiers = new TreeSet<String>();
@@ -188,6 +190,7 @@ list_of_identifiers ::= list_of_non_set_identifiers | list_of_set_identifiers;
 
 list_of_non_set_identifiers ::= IDENTIFIER:id COMMA list_of_non_set_identifiers:tipo {:  if(!type.containsKey(id)){
 																			type.put(id, (String) tipo);
+																			this.gc.saveVar(id);
 																	 		RESULT = tipo;
 																	 }else{
 																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
