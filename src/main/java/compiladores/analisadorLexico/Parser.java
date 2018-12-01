@@ -8,6 +8,7 @@ package compiladores.analisadorLexico;
 import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
+import compiladores.analisadorLexico.Exp;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20141204 (SVN rev 60) generated parser.
@@ -296,27 +297,6 @@ public class Parser extends java_cup.runtime.lr_parser {
   public int error_sym() {return 1;}
 
 
-
-
-  class Exp {
-	    public String type;
-	    public String code;
-		public Boolean isSet;
-	    
-
-	    public Exp(String t, String code) {
-  		  this.type = t;
-  		  this.code = code;
-		  this.isSet = false;
-	    }
-
-		
-		public Exp(String t, String code,Boolean isSet) {
-  		  this.type = t;
-  		  this.code = code;
-		  this.isSet = isSet;
-	    }
-	}
 
 
     public void report_error(String message, Object info)  {

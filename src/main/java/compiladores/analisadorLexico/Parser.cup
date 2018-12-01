@@ -3,6 +3,7 @@ package compiladores.analisadorLexico;
 import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
+import compiladores.analisadorLexico.Exp;
 
 action code {:
  Hashtable<String, String> type = new Hashtable();
@@ -18,27 +19,6 @@ Set<String> setIdentifiers = new TreeSet<String>();
 
 
 parser code {:
-
-  class Exp {
-	    public String type;
-	    public String code;
-		public Boolean isSet;
-	    
-
-	    public Exp(String t, String code) {
-  		  this.type = t;
-  		  this.code = code;
-		  this.isSet = false;
-	    }
-
-		
-		public Exp(String t, String code,Boolean isSet) {
-  		  this.type = t;
-  		  this.code = code;
-		  this.isSet = isSet;
-	    }
-	}
-
 
     public void report_error(String message, Object info)  {
         System.out.println("Warning - " + message);
