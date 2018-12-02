@@ -1,0 +1,437 @@
+package compiladores.analisadorLexico;
+
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+import compiladores.analisadorLexico.Exp;
+
+action code {:
+ Hashtable<String, String> type = new Hashtable();
+ Hashtable<String, String> value = new Hashtable();
+ 
+ //Esse conjunto tem os identificadores para sets.
+Set<String> setIdentifiers = new TreeSet<String>();
+
+ //identificadores para functions.
+ Set<String> functionIdentifiers = new TreeSet<String>();
+ 
+ 
+:};
+
+
+
+parser code {:
+
+    public void report_error(String message, Object info)  {
+        System.out.println("Warning - " + message);
+    }
+
+    public void report_fatal_error(String message, Object info)  {
+        System.out.println("Error - " + message);
+        System.exit(-1);
+    }
+    
+    public void syntax_error(Symbol s){
+    System.out.println("compiler has detected a syntax error at line " + s.left 
+        + " column " + s.right + " symbol id: " + s.sym);
+	}
+	
+	public boolean typeCheckAritimetico(String op , Exp e1 , Exp e2){
+			if(e1.isSet || e2.isSet){
+				return false;
+			}
+			
+			if(e1.type.equals(e2.type)){
+				if(e1.type.equalsIgnoreCase("integer")){
+				 return true;
+				 }
+				if(e1.type.equalsIgnoreCase("string")) {
+					if(op.equals("+")){
+						return true;
+					}
+					else{return false;}
+				}
+				else{return false;}
+				
+			}
+			else{
+			 return false;
+			}
+	}
+	
+	public boolean typeCheckRelacional(String op , Exp e1 , Exp e2){
+		if(op == "=" || op == "<>"){
+			return true;
+		}
+		
+		if(((!e1.isSet) && (e2.isSet)) || (e1.isSet && !e2.isSet)){
+			return false;
+		}
+		
+		if(e1.type.equalsIgnoreCase(e2.type)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public boolean isset;
+
+:};
+
+
+
+terminal PROGRAM, BEGIN, END, ASSIGNMENT, COMMA, DOT,
+SEMICOLON, COLON, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_BRACKETS, CLOSE_BRACKETS, OPEN_CURLY_BRACKETS,
+CLOSE_CURLY_BRACKETS, CRASIS, AND, ARRAY, CASE, CONST, INTEGER_DIV, DO, DOWNTO, ELSE, FILE, FOR,
+FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED, PROCEDURE, RECORD, REPEAT, SET,
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH, TYPE_INTEGER, REAL, SYMDIFF, INCLUDE, EXCLUDE;
+terminal String STRING_LITERAL;
+terminal String IDENTIFIER;
+terminal String INTEGER;
+terminal String TRUE;
+terminal String FALSE;
+terminal String STRING;
+terminal String BOOLEAN;
+terminal String GT;
+terminal String UQ;
+terminal String GE;
+terminal String EQ;
+terminal String LE;
+terminal String LT;
+
+terminal String PLUS;
+terminal String MINUS;
+terminal String MULT;
+terminal String DIV;
+
+
+
+
+non terminal program, declarations, type_declaration, constant_declaration1, variable_declaration, number, 
+procedure_declaration_without_parenthesis, procedure_declaration_with_parenthesis, procedure_arguments, procedure_arguments_aux, 
+arguments1, arguments2, procedure_declaration, optional_semicolon, list_of_identifiers, optional_var,
+function_declaration_without_parenthesis, function_declaration_with_parenthesis, function_declaration, 
+function_arguments, function_declaration_aux, function_local_declarations,assignment_declaration, program_block,
+set_op_declaration, while, list_of_set_identifiers, list_of_non_set_identifiers;
+non terminal Exp expression_declaration;
+non terminal String op_aritimetical_declaration;
+non terminal String op_relational_declaration;
+non terminal Exp term_declaration;
+non terminal Exp set_declaration;
+non terminal Exp set_body;
+
+
+
+
+
+/*---------------------------------------------------------- INICIO ----------------------------------------*/
+
+
+start with program;
+
+
+program ::= PROGRAM IDENTIFIER SEMICOLON declarations BEGIN program_block END DOT;
+
+declarations ::= declarations constant_declaration1 
+				 | 
+				 declarations variable_declaration
+				 |
+				 declarations procedure_declaration BEGIN END SEMICOLON 
+				 |
+				 declarations function_declaration
+				 | 
+				 
+				 ; 
+				 
+program_block ::= program_block assignment_declaration 
+				  |
+				  program_block while
+				  |
+				  
+				  ;
+
+
+
+/*------------------------------------PROCEDURES------------------------------------------------------------------*/	
+
+			
+			
+							
+				/* PROCEDURES - BASEADO EM: https://www.tutorialspoint.com/pascal/pascal_procedures.htm */
+				
+procedure_declaration ::=  procedure_declaration_without_parenthesis SEMICOLON
+						  |
+						   procedure_declaration_with_parenthesis SEMICOLON
+						  ;
+
+/*Declaracao de procedures sem parenteses*/
+procedure_declaration_without_parenthesis ::= PROCEDURE IDENTIFIER;
+
+/*Declaracao de procedures com parenteses (pode ter nenhum ou varios argumentos) */
+procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER OPEN_PARENTHESES procedure_arguments CLOSE_PARENTHESES;
+
+
+				
+
+/* Argumentos de uma procedure na forma de declarar um argumento ou varios argumentos de uma vez: "declaracao1, declaracao2 : TIPO"  */
+
+procedure_arguments ::= arguments1 | arguments2;
+
+arguments1 ::= optional_var list_of_identifiers SEMICOLON arguments1 
+			   | 
+			   optional_var list_of_identifiers
+			   ;
+			   
+arguments2 ::= ;
+
+list_of_identifiers ::= list_of_non_set_identifiers | list_of_set_identifiers;
+
+list_of_non_set_identifiers ::= IDENTIFIER:id COMMA list_of_non_set_identifiers:tipo {:  if(!type.containsKey(id)){
+																			type.put(id, (String) tipo);
+																	 		RESULT = tipo;
+																	 }else{
+																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
+																	 } :}
+						| 
+						IDENTIFIER:id COLON type_declaration:tipo {: if(!type.containsKey(id)){
+																			type.put(id, (String) tipo);
+																	 		RESULT = tipo;
+																	 }else{
+																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
+																	 } :};
+																  																  
+																  
+																  
+//Regras de producao especificas para a declaracao de sets, usando recursao. Para poder "subir" com informacao de que eh set.
+
+list_of_set_identifiers ::= IDENTIFIER:id COMMA list_of_set_identifiers:tipo {:  if(!type.containsKey(id)){
+																			type.put(id, (String) tipo);
+																			setIdentifiers.add(id);
+																	 		RESULT = tipo;
+																	 }else{
+																	 		report_fatal_error("Variavel ja foi declarada: " + id, id);	
+																	 } :}
+							| IDENTIFIER:id COLON SET OF type_declaration:tipo  {:if(!type.containsKey(id)){
+																  			type.put(id, (String) tipo);
+																  			setIdentifiers.add(id);
+																  			RESULT = tipo;
+																  			
+																  			
+																  }else{
+																  		report_fatal_error("Variavel ja foi declarada: " + id, id);
+																  } :};
+						
+optional_var ::= VAR | ;
+				
+
+/*----------------------------------------------------------------------------------------------*/
+
+							/*CONSTANTES - Not working yet - APARENTEMENTE N PRECISA*/
+constant_declaration1 ::= CONST IDENTIFIER EQ number SEMICOLON;
+
+
+
+
+
+/*--------------------------DECLARACAO DE VARIAVEIS--------------------------------------------------------*/
+
+							
+variable_declaration ::= optional_var list_of_identifiers SEMICOLON;
+
+
+/*---------------------------DECLARACAO DE TIPOS-------------------------------------------------------------*/
+type_declaration ::= TYPE_INTEGER {:RESULT = "integer";:}
+					 | 
+					 BOOLEAN {:RESULT = "boolean";:}
+					 | 
+					 STRING {:RESULT = "string";:}
+					 ;
+
+							/*NUMEROS*/			 
+number ::= INTEGER DOT INTEGER 
+		   | 
+		   INTEGER
+		   ;
+		   
+/*----------------------------------------DECLARACAO DE FUNCOES---------------------------------------------------*/
+function_declaration ::= function_declaration_aux:function function_local_declarations BEGIN END SEMICOLON;
+
+function_declaration_aux ::= function_declaration_without_parenthesis 
+						 | 
+						 function_declaration_with_parenthesis;
+
+function_declaration_without_parenthesis ::= FUNCTION IDENTIFIER:id COLON type_declaration:tipo SEMICOLON;
+					{:
+					 if(functionIdentifiers.contains(id)){
+					 	report_fatal_error("funcao de mesmo nome ja existe!", id);
+					 }else{
+					 	functionIdentifiers.add(id);
+					 }
+					:};
+					
+function_declaration_with_parenthesis ::= FUNCTION IDENTIFIER:id OPEN_PARENTHESES function_arguments:args
+CLOSE_PARENTHESES COLON type_declaration:tipo SEMICOLON;
+					{:
+					 if(functionIdentifiers.contains(id)){
+					 	report_fatal_error("funcao de mesmo nome ja existe!", id);
+					 }else{
+					 	functionIdentifiers.add(id);
+					 }
+					:};
+					
+								/* (Aproveita producoes de procedures) */
+function_arguments ::= arguments1 | arguments2;	
+
+function_local_declarations ::= variable_declaration function_local_declarations | ;							
+
+
+
+/*------------------------------------------DECLARACAO DE EXPRESSOES------------------------------------------------*/
+
+expression_declaration ::=  expression_declaration:e1 op_relational_declaration:op term_declaration:e2 
+							{:if(typeCheckRelacional(op ,e1 , e2)){
+								Exp e = new Exp("Boolean",e1.code+op+e2.code);
+								RESULT = e;
+							}
+							
+							else{
+								String e1IsSet = (e1.isSet) ? "Set of " : "";
+								String e2IsSet = (e2.isSet) ? "Set of " : "";
+								report_fatal_error("Não se pode operar " + e1IsSet + e1.type+ " com "+ e2IsSet + e2.type, e1);
+							}
+							
+							:}
+						   |expression_declaration:e1 op_aritimetical_declaration:op term_declaration:e2
+						   {:if(typeCheckAritimetico(op ,e1 ,e2)){
+						   		Exp e = new Exp(e1.type,e1.code+op+e2.code);
+						   		RESULT = e;
+						   		System.out.println(e1.isSet + " ou " + e2.isSet);
+						   }
+						   else {
+						    String e1IsSet = (e1.isSet) ? "Set of " : "";
+							String e2IsSet = (e2.isSet) ? "Set of " : "";
+							report_fatal_error("Não se pode operar " + e1IsSet + e1.type+ " com "+ e2IsSet + e2.code, e1);
+						   }:}
+
+						   |term_declaration:e1 {:RESULT = e1;:}
+						   |expression_declaration:e1 set_op_declaration:op set_declaration:e2{:
+						  
+						   if(e1.isSet &&e2.isSet){
+							   if(e1.type.equals(e2.type)){
+								   Exp e = new Exp(e1.type,e1.code + op +e2.code,true);
+								   RESULT = e;
+							   }
+							   else {report_fatal_error("Não se pode operar dois sets de tipos diferentes: " +e1.type+": "+e1.code+ " com "+e2.type+": "+e2.code, e1);}
+						   }
+						   else { report_fatal_error("A operacao nao ocorre entre dois sets!", e1);}
+						   
+						   :}
+						   |set_declaration:s {:RESULT = s;:}
+						   ;
+
+
+op_relational_declaration ::= EQ {:RESULT = "=";:} 
+							  | GE {:RESULT = ">=";:}
+							  | LE  {:RESULT = "<=";:}
+							  | GT  {:RESULT = ">";:}
+							  | LT  {:RESULT = "<";:}
+							  | UQ {:RESULT = "<>";:};
+							  
+op_aritimetical_declaration ::= PLUS {:RESULT = "+";:}
+								| MINUS {:RESULT = "-";:}
+								| MULT {:RESULT = "*";:}
+								| DIV {:RESULT = "/";:};
+
+set_declaration ::= OPEN_BRACKETS set_body:s {:Exp e = new Exp(s.type,"[" + s.code,true);
+											 RESULT = e;:}
+		    		|OPEN_BRACKETS CLOSE_BRACKETS {:Exp e = new Exp(null,"[" + "]",true);
+		    									   RESULT = e;:};
+		    		
+set_body ::= term_declaration:t COMMA set_body:s {:if(t.type.equals(s.type)){
+								 RESULT = new Exp(t.type, t.code + "," + s.code);
+								}
+								else {report_fatal_error("Um set não pode conter dois elementos de tipos diferentes", null);}
+								:}
+			|term_declaration:t CLOSE_BRACKETS{:RESULT = new Exp(t.type,t.code+"]");
+			:};
+
+term_declaration ::= OPEN_PARENTHESES expression_declaration:e1 CLOSE_PARENTHESES  {:RESULT = e1;:}
+					 | INTEGER:i {: Exp e = new Exp("integer",i);
+					 RESULT = e;:}
+					 | IDENTIFIER:id {:
+					 Exp e;
+					 if(setIdentifiers.contains(id)){
+					 	e = new Exp(type.get(id), id, true);
+					 }else{
+					 	e = new Exp(type.get(id),id);
+					 }
+					 RESULT = e;:}
+					 | TRUE:t  {:Exp e = new Exp("Boolean",t);
+					 RESULT = e;:}
+					 | FALSE:f {:Exp e = new Exp("Boolean",f);
+					 RESULT = e;:}
+					 | STRING_LITERAL:s {:Exp e = new Exp("string",s);
+					 RESULT = e;:};
+
+set_op_declaration ::= PLUS 
+						| MINUS
+						| MULT
+						| SYMDIFF
+						| EQ
+						| UQ
+						| LE
+						| INCLUDE
+						| EXCLUDE
+						| IN;
+			
+/*------------------------------------------DECLARACAO DE ATRIBUICAO------------------------------------------------*/
+
+assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEMICOLON{:
+	if(type.get(id) != null){
+		
+		
+		if(!e.isSet && !setIdentifiers.contains(id) && type.get(id).equalsIgnoreCase(e.type)){
+				value.put(id,e.code);
+		}
+		else if(e.isSet && setIdentifiers.contains(id)){
+			if(e.type.equalsIgnoreCase(type.get(id))){
+				value.put(id, e.code);
+			}
+			else{
+				report_fatal_error("A variavel do tipo set of " + type.get(id) + " nao pode ser associada a um set of " +  e.type, null);
+			}
+		}
+
+		else if(setIdentifiers.contains(id) && e.type == null){
+			value.put(id,e.code);
+		
+		}
+		
+		else{ 
+			if(!setIdentifiers.contains(id) && !e.isSet) {
+				report_fatal_error("O tipo " + type.get(id) + " não pode ser associado ao tipo " +e.type, null); 			
+			}
+			else if (!setIdentifiers.contains(id) && e.isSet){
+				report_fatal_error("A variavel: " + id + " não é um set!", null); 
+			}
+			else if (setIdentifiers.contains(id) && !e.isSet){
+				report_fatal_error("O valor atribuido a variavel: " + id + " não é um set!", null); 
+			}
+		}
+	}
+	else {
+	report_fatal_error("Variavel nao foi declarada anteriormente " + id, id);
+	}
+	
+	
+:};
+
+/*------------------------------------------DECLARACAO De while------------------------------------------------*/
+
+while ::= WHILE expression_declaration:e DO BEGIN program_block END SEMICOLON{:if(e.type.equalsIgnoreCase("Boolean")==false){
+	report_fatal_error("Condição de parada não é uma expressão boleana", null);
+}:};
+
+

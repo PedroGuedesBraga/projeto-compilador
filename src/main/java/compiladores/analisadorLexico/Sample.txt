@@ -1,0 +1,19 @@
+Program NomeDOProgra;
+var b, c : set of String;
+var a : set of strIng;
+function fazerAlgo : integer;
+begin
+end;
+function fazerAlgo : integer;
+begin
+end;
+
+begin
+
+while true do 
+begin 
+
+end;
+
+
+end.
