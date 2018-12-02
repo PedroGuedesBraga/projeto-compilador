@@ -1,6 +1,15 @@
 Program NomeDOProgra;
 var b, c : set of String;
 var a : set of strIng;
+var z : set of integer;
+procedure fazAlgo;
+begin end;
+procedure fazAlgo1();
+begin 
+a := ['oi', 'tudo bem'];
+z := [];
+a := [];
+end;
 
 begin
 

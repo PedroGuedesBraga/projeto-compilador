@@ -4,6 +4,8 @@ import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
 import compiladores.analisadorLexico.Exp;
+import compiladores.analisadorLexico.Function;
+import compiladores.analisadorLexico.Procedure;
 
 action code {:
  Hashtable<String, String> type = new Hashtable();
@@ -11,9 +13,9 @@ action code {:
  
  //Esse conjunto tem os identificadores para sets.
 Set<String> setIdentifiers = new TreeSet<String>();
- 
- 
- 
+
+List<Function> functions = new ArrayList<Function>();
+List<Procedure> procedures = new ArrayList<Procedure>();
 :};
 
 
@@ -136,13 +138,17 @@ declarations ::= declarations constant_declaration1
 				 | 
 				 declarations variable_declaration
 				 |
-				 declarations procedure_declaration BEGIN END SEMICOLON 
+				 declarations procedure_declaration BEGIN program_block END SEMICOLON 
 				 |
-				 declarations function_declaration
+				 declarations function_declaration BEGIN program_block END SEMICOLON
 				 | 
 				 
 				 ; 
 				 
+				 
+				 
+
+
 program_block ::= program_block assignment_declaration 
 				  |
 				  program_block while
@@ -165,10 +171,25 @@ procedure_declaration ::=  procedure_declaration_without_parenthesis SEMICOLON
 						  ;
 
 /*Declaracao de procedures sem parenteses*/
-procedure_declaration_without_parenthesis ::= PROCEDURE IDENTIFIER;
+procedure_declaration_without_parenthesis ::= PROCEDURE IDENTIFIER:id {: Procedure p; 
+																		p = new Procedure(id, new LinkedList<String>());
+																	   	if(this.procedures.contains(p)){
+																	   		report_fatal_error("Procedure: " +id+" -> ja declarada anteriormente!", id);
+																	   	}else{
+																	   		this.procedures.add(p);
+																	   		RESULT = p;
+																	   	}
+																	   :};
 
 /*Declaracao de procedures com parenteses (pode ter nenhum ou varios argumentos) */
-procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER OPEN_PARENTHESES procedure_arguments CLOSE_PARENTHESES;
+procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER:id OPEN_PARENTHESES procedure_arguments CLOSE_PARENTHESES {: Procedure p; 
+																														p = new Procedure(id, new LinkedList<String>());
+																														if(this.procedures.contains(p)){
+																															report_fatal_error("Procedure: "+id+" -> ja declarada anteriormente!", id);
+																														}else{
+																															this.procedures.add(p);
+																														}
+																														:};
 
 
 				
@@ -380,10 +401,11 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 				value.put(id,e.code);
 		}
 		else if(e.isSet && setIdentifiers.contains(id)){
-			if(e.type.equalsIgnoreCase(type.get(id))){
+			if(!e.code.equalsIgnoreCase("[]") && e.type.equalsIgnoreCase(type.get(id))){
 				value.put(id, e.code);
-			}
-			else{
+			}else if (e.code.equalsIgnoreCase("[]")){
+				value.put(id, e.code);
+			}else{
 				report_fatal_error("A variavel do tipo set of " + type.get(id) + " nao pode ser associada a um set of " +  e.type, null);
 			}
 		}
