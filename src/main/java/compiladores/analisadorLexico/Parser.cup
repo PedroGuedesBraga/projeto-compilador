@@ -121,6 +121,8 @@ non terminal String op_relational_declaration;
 non terminal Exp term_declaration;
 non terminal Exp set_declaration;
 non terminal Exp set_body;
+non terminal function_call;
+non terminal function_call_arguments;
 
 
 
@@ -152,6 +154,8 @@ declarations ::= declarations constant_declaration1
 program_block ::= program_block assignment_declaration 
 				  |
 				  program_block while
+				  |
+				  program_block function_call  
 				  |
 				  
 				  ;
@@ -289,7 +293,14 @@ CLOSE_PARENTHESES COLON type_declaration SEMICOLON;
 								/* (Aproveita producoes de procedures) */
 function_arguments ::= arguments1 | arguments2;	
 
-function_local_declarations ::= variable_declaration function_local_declarations | ;							
+function_local_declarations ::= variable_declaration function_local_declarations | ;	
+
+
+/*-----------------------------------------Chamada de Funcoes-----------------------------------------*/
+
+function_call ::= IDENTIFIER OPEN_PARENTHESES function_call_arguments CLOSE_PARENTHESES SEMICOLON;
+
+function_call_arguments ::= expression_declaration | ;						
 
 
 
@@ -312,7 +323,6 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   {:if(typeCheckAritimetico(op ,e1 ,e2)){
 						   		Exp e = new Exp(e1.type,e1.code+op+e2.code);
 						   		RESULT = e;
-						   		System.out.println(e1.isSet + " ou " + e2.isSet);
 						   }
 						   else {
 						    String e1IsSet = (e1.isSet) ? "Set of " : "";
