@@ -121,11 +121,10 @@ non terminal String op_relational_declaration;
 non terminal Exp term_declaration;
 non terminal Exp set_declaration;
 non terminal Exp set_body;
-non terminal function_call;
-non terminal function_call_arguments;
-
-
-
+non terminal function_or_procedure_call;
+non terminal function_or_procedure_call_arguments;
+non terminal function_or_procedure_call_with_arguments;
+non terminal function_or_procedure_call_without_arguments;
 
 
 /*---------------------------------------------------------- INICIO ----------------------------------------*/
@@ -155,7 +154,7 @@ program_block ::= program_block assignment_declaration
 				  |
 				  program_block while
 				  |
-				  program_block function_call  
+				  program_block function_or_procedure_call  
 				  |
 				  
 				  ;
@@ -298,11 +297,13 @@ function_local_declarations ::= variable_declaration function_local_declarations
 
 /*-----------------------------------------Chamada de Funcoes-----------------------------------------*/
 
-function_call ::= IDENTIFIER OPEN_PARENTHESES function_call_arguments CLOSE_PARENTHESES SEMICOLON;
+function_or_procedure_call ::= function_or_procedure_call_with_arguments | function_or_procedure_call_without_arguments;
 
-function_call_arguments ::= expression_declaration | ;						
+function_or_procedure_call_with_arguments ::= IDENTIFIER OPEN_PARENTHESES function_or_procedure_call_arguments CLOSE_PARENTHESES SEMICOLON;
 
+function_or_procedure_call_without_arguments ::= IDENTIFIER OPEN_PARENTHESES CLOSE_PARENTHESES SEMICOLON;
 
+function_or_procedure_call_arguments ::= expression_declaration COMMA function_or_procedure_call_arguments | expression_declaration;
 
 /*------------------------------------------DECLARACAO DE EXPRESSOES------------------------------------------------*/
 
@@ -344,6 +345,9 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   
 						   :}
 						   |set_declaration:s {:RESULT = s;:}
+						   
+						   |
+						   function_or_procedure_call
 						   ;
 
 
