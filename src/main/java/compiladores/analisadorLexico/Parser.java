@@ -454,6 +454,7 @@ public boolean containsFunction(Function f){
 
 //recebe o nome da funcao chamada e os argumentos passados como parametro
 public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argumentosPassados){
+	System.out.println(argumentosPassados.get(0).getArgumentType() + " " + argumentosPassados.get(0).getArgumentIdentifier());
 	boolean existeFuncao = false;
 	int numeroArgumentosIguais = 0;
 	for(Function f : functions){
@@ -472,6 +473,7 @@ public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argum
 		}
 		if(numeroArgumentosIguais == argumentosPassados.size()){
 					existeFuncao = true;
+					
 					break;
 				}
 	}
@@ -939,6 +941,7 @@ public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argum
 
 																					Function f = new Function(id, (String) t, arguments);
 																					
+																					
 																					if(!containsFunction(f)){
 																						functions.add(f);
 																						
@@ -1167,9 +1170,12 @@ public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argum
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
+		int argsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int argsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		LinkedList<Argument> args = (LinkedList<Argument>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 
-																																			checkChamadaDeFuncao(id, functionCallArguments);
-																																			functionCallArguments = new LinkedList<Argument>(); //Reseta a variavel
+																																			
+																																			
 
 																																			
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("function_or_procedure_call_with_arguments",36, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1188,15 +1194,16 @@ public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argum
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 57: // function_or_procedure_call_arguments ::= expression_declaration COMMA function_or_procedure_call_arguments 
             {
-              Object RESULT =null;
+              LinkedList<Argument> RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Exp e = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		 
-																											 //Argumento de chamada de funcao. Não importa o identificador dele
-																											Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
-																											functionCallArguments.addFirst(callArgument);
-																											
+		int argsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int argsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		LinkedList<Argument> args = (LinkedList<Argument>)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
+																											args.addFirst(callArgument);
+																											RESULT = args; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("function_or_procedure_call_arguments",35, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1204,15 +1211,14 @@ public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argum
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 58: // function_or_procedure_call_arguments ::= expression_declaration 
             {
-              Object RESULT =null;
+              LinkedList<Argument> RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Exp e = (Exp)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 //Argumento de chamada de funcao. Não importa o identificador dele
-																	Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
-																	functionCallArguments.addFirst(callArgument);
-																	RESULT = e;												
-																	
+		 LinkedList<Argument> functionCallArgs = new LinkedList<Argument>();
+																	Argument callArgument = new Argument(e.code, e.type, e.isSet);
+																	functionCallArgs.addFirst(callArgument);
+																	RESULT = functionCallArgs; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("function_or_procedure_call_arguments",35, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
