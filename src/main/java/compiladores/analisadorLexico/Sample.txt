@@ -1,15 +1,19 @@
 Program NomeDOProgra;
 var b, c : set of String;
 var a : set of strIng;
+var z : set of integer;
 
+function fazAlgo(num: string; num2: string) : String;
 begin
-
-while a > b do 
-begin 
 
 end;
 
+function fazAlgo1(num: string; args : string) : String;
+begin
 
+end;
 
+begin
 
+fazAlgo('oi', 'pedro');
 end.

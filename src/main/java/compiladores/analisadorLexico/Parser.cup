@@ -4,6 +4,8 @@ import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
 import compiladores.analisadorLexico.Exp;
+import compiladores.analisadorLexico.Function;
+import compiladores.analisadorLexico.Procedure;
 
 action code {:
  Hashtable<String, String> type = new Hashtable();
@@ -11,9 +13,60 @@ action code {:
  
  //Esse conjunto tem os identificadores para sets.
 Set<String> setIdentifiers = new TreeSet<String>();
- 
- 
- 
+
+LinkedList<Function> functions = new LinkedList<Function>();
+LinkedList<Procedure> procedures = new LinkedList<Procedure>();
+
+
+//Vai representar os tipos dos argumentos da funcao que está sendo definida no momento
+LinkedList<Argument> arguments = new LinkedList<Argument>();
+
+//Vai ter os argumentos da funcao que foi chamada no momento.
+LinkedList<Argument> functionCallArguments = new LinkedList<Argument>();
+
+
+//checa se uma funcao ja existe
+public boolean containsFunction(Function f){
+	for(Function fun : functions){
+		if(fun.equals(f)){
+			return true;
+		}
+	}
+	return false;
+}
+
+//recebe o nome da funcao chamada e os argumentos passados como parametro
+public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argumentosPassados){
+	boolean existeFuncao = false;
+	int numeroArgumentosIguais = 0;
+	for(Function f : functions){
+		numeroArgumentosIguais = 0;
+		if(f.getIdentificador().equals(nomeDaFuncao)){
+			List<Argument> argumentosDaFuncao = f.getArguments();
+			if(argumentosDaFuncao.size() == argumentosPassados.size()){
+				for(int i = 0; i < argumentosDaFuncao.size(); i++){
+					if(argumentosDaFuncao.get(i).getArgumentType().equalsIgnoreCase(argumentosPassados.get(i).getArgumentType())){
+						if(argumentosDaFuncao.get(i).isSet() == argumentosPassados.get(i).isSet()){
+							numeroArgumentosIguais+=1;
+						}
+					}
+				}
+			}
+		}
+		if(numeroArgumentosIguais == argumentosPassados.size()){
+					existeFuncao = true;
+					break;
+				}
+	}
+	
+	if(!existeFuncao){
+		report_fatal_error("Funcao chamada nao existe: " + nomeDaFuncao, null);	
+	}
+
+
+}
+
+
 :};
 
 
@@ -73,6 +126,10 @@ parser code {:
 			return false;
 		}
 	}
+	
+	
+	
+	
 
 	public boolean isset;
 
@@ -119,8 +176,17 @@ non terminal String op_relational_declaration;
 non terminal Exp term_declaration;
 non terminal Exp set_declaration;
 non terminal Exp set_body;
+non terminal function_or_procedure_call;
+non terminal function_or_procedure_call_arguments;
+non terminal function_or_procedure_call_with_arguments;
+non terminal function_or_procedure_call_without_arguments;
 
-
+non terminal functions_or_procedures_arguments;
+non terminal functions_or_procedures_arguments1;
+non terminal functions_or_procedures_arguments2;
+non terminal list_of_identifiers_functions_or_procedures;
+non terminal String list_of_non_set_identifiers_functions_or_procedures;
+non terminal String list_of_set_identifiers_functions_or_procedures;
 
 
 
@@ -136,16 +202,22 @@ declarations ::= declarations constant_declaration1
 				 | 
 				 declarations variable_declaration
 				 |
-				 declarations procedure_declaration BEGIN END SEMICOLON 
+				 declarations procedure_declaration BEGIN program_block END SEMICOLON 
 				 |
-				 declarations function_declaration
+				 declarations function_declaration BEGIN program_block END SEMICOLON
 				 | 
 				 
 				 ; 
 				 
+				 
+				 
+
+
 program_block ::= program_block assignment_declaration 
 				  |
 				  program_block while
+				  |
+				  program_block function_or_procedure_call  
 				  |
 				  
 				  ;
@@ -165,10 +237,28 @@ procedure_declaration ::=  procedure_declaration_without_parenthesis SEMICOLON
 						  ;
 
 /*Declaracao de procedures sem parenteses*/
-procedure_declaration_without_parenthesis ::= PROCEDURE IDENTIFIER;
+procedure_declaration_without_parenthesis ::= PROCEDURE IDENTIFIER:id {: Procedure p; 
+																		p = new Procedure(id, new LinkedList<Argument>());
+																	   	if(this.procedures.contains(p)){
+																	   		report_fatal_error("Procedure: " +id+" -> ja declarada anteriormente!", id);
+																	   	}else{
+																	   		this.procedures.add(p);
+																	   		
+																	   	}
+																	   :};
 
 /*Declaracao de procedures com parenteses (pode ter nenhum ou varios argumentos) */
-procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER OPEN_PARENTHESES procedure_arguments CLOSE_PARENTHESES;
+procedure_declaration_with_parenthesis ::= PROCEDURE IDENTIFIER:id OPEN_PARENTHESES functions_or_procedures_arguments CLOSE_PARENTHESES {: 
+																																		Procedure p;
+																																		p = new Procedure(id, arguments);
+																																		if(!procedures.contains(p)){
+																																			procedures.add(p);
+																																			arguments = new LinkedList<Argument>();
+																																			
+																																		}else{
+																																			report_fatal_error("Procedure: " + id + " ja declarada anteriormente!", p);
+																																		}																											
+																																		:};
 
 
 				
@@ -254,23 +344,121 @@ number ::= INTEGER DOT INTEGER
 		   ;
 		   
 /*----------------------------------------DECLARACAO DE FUNCOES---------------------------------------------------*/
-function_declaration ::= function_declaration_aux function_local_declarations BEGIN END SEMICOLON;
+function_declaration ::= function_declaration_aux function_local_declarations {:arguments = new LinkedList<Argument>(); :} ;
 
 function_declaration_aux ::= function_declaration_without_parenthesis 
 						 | 
 						 function_declaration_with_parenthesis;
 
-function_declaration_without_parenthesis ::= FUNCTION IDENTIFIER COLON type_declaration SEMICOLON;
+function_declaration_without_parenthesis ::= FUNCTION IDENTIFIER:id COLON type_declaration:t SEMICOLON {: 
 
-function_declaration_with_parenthesis ::= FUNCTION IDENTIFIER OPEN_PARENTHESES function_arguments
-CLOSE_PARENTHESES COLON type_declaration SEMICOLON;
+																					Function f = new Function(id, (String) t, arguments);
+																					
+																					if(!containsFunction(f)){
+																						functions.add(f);
+																						
+																					}else{
+																						report_fatal_error("A funcao: " + id + " ja foi declarada!", id);
+																					}:}; 
 
-								/* (Aproveita producoes de procedures) */
-function_arguments ::= arguments1 | arguments2;	
+function_declaration_with_parenthesis ::= FUNCTION IDENTIFIER:id OPEN_PARENTHESES functions_or_procedures_arguments
+CLOSE_PARENTHESES COLON type_declaration:t SEMICOLON {: Function f = new Function(id, (String) t, arguments);
+															
+															if(!containsFunction(f)){
+																functions.add(f);
+																arguments = new LinkedList();
+															}else{
+																report_fatal_error("A funcao: " + id + " ja foi declarada!", id);
+															}:};
 
-function_local_declarations ::= variable_declaration function_local_declarations | ;							
+function_local_declarations ::= variable_declaration function_local_declarations | ;	
 
 
+
+/*---------------------------argumentos para functions ou procedures----------------------------------*/
+
+functions_or_procedures_arguments ::= functions_or_procedures_arguments1 | functions_or_procedures_arguments2 {::};
+
+functions_or_procedures_arguments1 ::= optional_var list_of_identifiers_functions_or_procedures SEMICOLON functions_or_procedures_arguments1
+									  |
+									  optional_var list_of_identifiers_functions_or_procedures;
+									
+functions_or_procedures_arguments2 ::= ;
+									  
+
+list_of_identifiers_functions_or_procedures ::= list_of_non_set_identifiers_functions_or_procedures 
+												|
+												list_of_set_identifiers_functions_or_procedures;
+												
+
+list_of_non_set_identifiers_functions_or_procedures ::= IDENTIFIER:id COMMA list_of_non_set_identifiers_functions_or_procedures:tipo {:  
+																				   Argument argument = new Argument(id, (String) tipo, false);
+																				   if(!arguments.contains(argument)){
+																				   	   arguments.addFirst(argument);
+																					   															
+																					   RESULT = (String) tipo;
+																				   }else{
+																				  	report_fatal_error("Dois argumentos com o mesmo identificador: " + id, argument);
+																				   }   :}
+						| 
+						IDENTIFIER:id COLON type_declaration:tipo {:  Argument argument = new Argument(id, (String) tipo, true);
+																			
+																				   if(!arguments.contains(argument)){
+																				   	   arguments.addFirst(argument);
+																					   RESULT = (String) tipo;																		
+																				   }else{
+																				 	report_fatal_error("Dois argumentos com o mesmo identificador: " + id, argument);
+																				   } :};
+																   
+list_of_set_identifiers_functions_or_procedures ::= IDENTIFIER:id COMMA list_of_set_identifiers_functions_or_procedures:tipo {: Argument argument = new Argument(id, (String) tipo, true);
+																				   if(!arguments.contains(argument)){
+																				   	   arguments.addFirst(argument);
+																					   RESULT = (String) tipo;																		
+																				   }else{
+																				  	report_fatal_error("Dois argumentos com o mesmo identificador: " + id, argument);
+																				   }  :}
+							| IDENTIFIER:id COLON SET OF type_declaration:tipo  {: 
+																				Argument argument = new Argument(id, (String) tipo, true);
+																					
+																				   if(!arguments.contains(argument)){
+																				   	   arguments.addFirst(argument);
+																					   RESULT = (String) tipo;																		
+																				   }else{
+																				   	report_fatal_error("Dois argumentos com o mesmo identificador: " + id, argument);
+																				   }
+																				 :}; 
+																				 
+																				 
+
+
+
+
+
+/*-----------------------------------------Chamada de Funcoes-----------------------------------------*/
+
+function_or_procedure_call ::= function_or_procedure_call_with_arguments | function_or_procedure_call_without_arguments;
+
+function_or_procedure_call_with_arguments ::= IDENTIFIER:id OPEN_PARENTHESES function_or_procedure_call_arguments CLOSE_PARENTHESES SEMICOLON
+																																			{: 
+																																			checkChamadaDeFuncao(id, functionCallArguments);
+																																			functionCallArguments = new LinkedList<Argument>(); //Reseta a variavel
+
+																																			:};
+
+function_or_procedure_call_without_arguments ::= IDENTIFIER OPEN_PARENTHESES CLOSE_PARENTHESES SEMICOLON;
+
+function_or_procedure_call_arguments ::= expression_declaration:e COMMA function_or_procedure_call_arguments {: 
+																											 //Argumento de chamada de funcao. Não importa o identificador dele
+																											Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
+																											functionCallArguments.addFirst(callArgument);
+																											:}
+										| expression_declaration:e {: //Argumento de chamada de funcao. Não importa o identificador dele
+																	Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
+																	functionCallArguments.addFirst(callArgument);
+																	RESULT = e;												
+																	:};
+																	
+																	
 
 /*------------------------------------------DECLARACAO DE EXPRESSOES------------------------------------------------*/
 
@@ -291,7 +479,6 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   {:if(typeCheckAritimetico(op ,e1 ,e2)){
 						   		Exp e = new Exp(e1.type,e1.code+op+e2.code);
 						   		RESULT = e;
-						   		System.out.println(e1.isSet + " ou " + e2.isSet);
 						   }
 						   else {
 						    String e1IsSet = (e1.isSet) ? "Set of " : "";
@@ -313,6 +500,9 @@ expression_declaration ::=  expression_declaration:e1 op_relational_declaration:
 						   
 						   :}
 						   |set_declaration:s {:RESULT = s;:}
+						   
+						   |
+						   function_or_procedure_call
 						   ;
 
 
@@ -380,10 +570,11 @@ assignment_declaration ::= IDENTIFIER:id ASSIGNMENT expression_declaration:e SEM
 				value.put(id,e.code);
 		}
 		else if(e.isSet && setIdentifiers.contains(id)){
-			if(e.type.equalsIgnoreCase(type.get(id))){
+			if(!e.code.equalsIgnoreCase("[]") && e.type.equalsIgnoreCase(type.get(id))){
 				value.put(id, e.code);
-			}
-			else{
+			}else if (e.code.equalsIgnoreCase("[]")){
+				value.put(id, e.code);
+			}else{
 				report_fatal_error("A variavel do tipo set of " + type.get(id) + " nao pode ser associada a um set of " +  e.type, null);
 			}
 		}
