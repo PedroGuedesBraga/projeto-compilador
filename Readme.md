@@ -14,6 +14,8 @@
 
 ### Para realizar o processo de análise sobre um programa escrito no arquivo "Sample.txt" basta executar a classe "Main.java".
 
+### Opcionalmente: Editar o arquivo generator.py com o caminho dos jars necessários para gerar os analisadores
+
 
 
 
