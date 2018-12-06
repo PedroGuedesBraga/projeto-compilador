@@ -37,6 +37,7 @@ public boolean containsFunction(Function f){
 
 //recebe o nome da funcao chamada e os argumentos passados como parametro
 public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argumentosPassados){
+	System.out.println(argumentosPassados.get(0).getArgumentType() + " " + argumentosPassados.get(0).getArgumentIdentifier());
 	boolean existeFuncao = false;
 	int numeroArgumentosIguais = 0;
 	for(Function f : functions){
@@ -55,6 +56,7 @@ public void checkChamadaDeFuncao(String nomeDaFuncao, LinkedList<Argument> argum
 		}
 		if(numeroArgumentosIguais == argumentosPassados.size()){
 					existeFuncao = true;
+					
 					break;
 				}
 	}
@@ -177,7 +179,7 @@ non terminal Exp term_declaration;
 non terminal Exp set_declaration;
 non terminal Exp set_body;
 non terminal function_or_procedure_call;
-non terminal function_or_procedure_call_arguments;
+non terminal LinkedList<Argument> function_or_procedure_call_arguments;
 non terminal function_or_procedure_call_with_arguments;
 non terminal function_or_procedure_call_without_arguments;
 
@@ -354,6 +356,7 @@ function_declaration_without_parenthesis ::= FUNCTION IDENTIFIER:id COLON type_d
 
 																					Function f = new Function(id, (String) t, arguments);
 																					
+																					
 																					if(!containsFunction(f)){
 																						functions.add(f);
 																						
@@ -438,25 +441,22 @@ list_of_set_identifiers_functions_or_procedures ::= IDENTIFIER:id COMMA list_of_
 
 function_or_procedure_call ::= function_or_procedure_call_with_arguments | function_or_procedure_call_without_arguments;
 
-function_or_procedure_call_with_arguments ::= IDENTIFIER:id OPEN_PARENTHESES function_or_procedure_call_arguments CLOSE_PARENTHESES SEMICOLON
+function_or_procedure_call_with_arguments ::= IDENTIFIER:id OPEN_PARENTHESES function_or_procedure_call_arguments:args CLOSE_PARENTHESES SEMICOLON
 																																			{: 
-																																			checkChamadaDeFuncao(id, functionCallArguments);
-																																			functionCallArguments = new LinkedList<Argument>(); //Reseta a variavel
+																																			
+																																			
 
 																																			:};
 
 function_or_procedure_call_without_arguments ::= IDENTIFIER OPEN_PARENTHESES CLOSE_PARENTHESES SEMICOLON;
 
-function_or_procedure_call_arguments ::= expression_declaration:e COMMA function_or_procedure_call_arguments {: 
-																											 //Argumento de chamada de funcao. Não importa o identificador dele
-																											Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
-																											functionCallArguments.addFirst(callArgument);
-																											:}
-										| expression_declaration:e {: //Argumento de chamada de funcao. Não importa o identificador dele
-																	Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
-																	functionCallArguments.addFirst(callArgument);
-																	RESULT = e;												
-																	:};
+function_or_procedure_call_arguments ::= expression_declaration:e COMMA function_or_procedure_call_arguments:args {: Argument callArgument = new Argument("DoesNotMatter", e.type, e.isSet);
+																											args.addFirst(callArgument);
+																											RESULT = args; :};
+function_or_procedure_call_arguments ::= expression_declaration:e {: LinkedList<Argument> functionCallArgs = new LinkedList<Argument>();
+																	Argument callArgument = new Argument(e.code, e.type, e.isSet);
+																	functionCallArgs.addFirst(callArgument);
+																	RESULT = functionCallArgs; :};
 																	
 																	
 

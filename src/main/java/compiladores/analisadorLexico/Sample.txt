@@ -3,17 +3,18 @@ var b, c : set of String;
 var a : set of strIng;
 var z : set of integer;
 
-function fazAlgo(num: string; num2: string) : String;
+function fazAlgo(num1: string; num4: string) : String;
 begin
 
 end;
 
-function fazAlgo1(num: string; args : string) : String;
+function fazAlgo(num2: boolean; num3: StriNg): String;
 begin
 
 end;
 
+
 begin
 
-fazAlgo('oi', 'pedro');
+fazAlgo(true, 'oi');
 end.
