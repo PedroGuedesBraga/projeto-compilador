@@ -1,15 +1,16 @@
 package compiladores.analisadorLexico;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Procedure {
 	
 	private String identificador;
-	private LinkedList<String> argumentsType; //tipo dos argumentos, para fazer checagem na chamada
+	private List<Argument> arguments; //tipo dos argumentos, para fazer checagem na chamada
 	
-	public Procedure(String identificador, LinkedList<String> argumentsType) {
+	public Procedure(String identificador, List<Argument> arguments) {
 		this.identificador = identificador;
-		this.argumentsType = argumentsType;
+		this.arguments = arguments;
 	}
 	
 	
@@ -19,11 +20,11 @@ public class Procedure {
 	public void setIdentificador(String identificador) {
 		this.identificador = identificador;
 	}
-	public LinkedList<String> getArgumentsType() {
-		return argumentsType;
+	public List<Argument> getArgumentsType() {
+		return arguments;
 	}
-	public void setArgumentsType(LinkedList<String> argumentsType) {
-		this.argumentsType = argumentsType;
+	public void setArgumentsType(List<Argument> arguments) {
+		this.arguments = arguments;
 	}
 	
 	public boolean equals(Object obj) {
@@ -32,7 +33,7 @@ public class Procedure {
 		}
 		if(obj instanceof Procedure) {
 			Procedure p = (Procedure) obj;
-			if(p.getIdentificador().equals(this.identificador) && p.getArgumentsType().equals(this.argumentsType)) {
+			if(p.getIdentificador().equals(this.identificador) && p.getArgumentsType().equals(this.arguments)) {
 				return true;
 			}
 		}

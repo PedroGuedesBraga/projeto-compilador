@@ -1,17 +1,27 @@
 package compiladores.analisadorLexico;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Function {
 
 	private String identificador;
 	private String tipoDoRetorno; //Tipo de retorno, para fazer checagem em expressoes
-	private LinkedList<String> argumentsType; //Tipos dos argumentos, para fazer checagem na chamada de funcoes
+	private List<Argument> arguments;
+
 	
-	public Function(String identificador, String tipoDoRetorno, LinkedList<String> argumentsType) {
+	public List<Argument> getArguments() {
+		return arguments;
+	}
+
+	public void setArguments(List<Argument> arguments) {
+		this.arguments = arguments;
+	}
+
+	public Function(String identificador, String tipoDoRetorno, List<Argument> arguments) {
 		this.identificador = identificador;
 		this.tipoDoRetorno = tipoDoRetorno;
-		this.argumentsType = argumentsType;
+		this.arguments = arguments;
 	}
 	
 	public String getIdentificador() {
@@ -26,12 +36,7 @@ public class Function {
 	public void setTipoDoRetorno(String tipoDoRetorno) {
 		this.tipoDoRetorno = tipoDoRetorno;
 	}
-	public LinkedList<String> getArgumentsType() {
-		return argumentsType;
-	}
-	public void setArgumentsType(LinkedList<String> argumentsType) {
-		this.argumentsType = argumentsType;
-	}
+
 	
 	public boolean equals(Object obj) {
 		if(obj == null) {
@@ -39,7 +44,15 @@ public class Function {
 		}
 		if (obj instanceof Function) {
 			Function f = (Function) obj;
-			if(f.getIdentificador().equals(this.getIdentificador()) && f.getArgumentsType().equals(this.getArgumentsType())){
+			if(f.getIdentificador().equals(this.getIdentificador())){
+				if(!(f.getArguments().size() == this.getArguments().size())) {
+					return false;
+				}
+				for(int i = 0; i < f.getArguments().size(); i++) {
+					if(!f.getArguments().get(i).equalsTypeArgument(this.getArguments().get(i))) {
+						return false;
+					}
+				}
 				return true;
 			}
 		}
