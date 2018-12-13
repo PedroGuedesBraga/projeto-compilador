@@ -1,21 +1,18 @@
-# Compilador (com escopo reduzido) para a linguagem Pascal para a disciplina de Compiladores - Ciência da Computação UFCG
+## A scope reduced compiler for Pascal - (Only Lexical, Syntactic and Semantic analysis)
 
-## Instruções: 
+### Instructions (Devs):
+To generate the syntactic, semantic and lexical analyzers:
+```
+* Edit the file generator.py with the path of the jflex and java cup dependencies.
+```
 
-### Para gerar a classe java que representa o analisador léxico: 
+```
+* Run on command line: python generator.py
+```
 
-#### java -jar <caminho do .jar do jflex na sua máquina> language.lex
-
-### Para gerar a classe java que representa o analisador sintático:
-
-#### java -jar <Caminho do .jar do cup na sua máquina> -parser Parser -symbols sym Parser.cup
-
-### (Obs: jars do jflex e do cup na pasta "jars")
-
-### Para realizar o processo de análise sobre um programa escrito no arquivo "Sample.txt" basta executar a classe "Main.java".
-
-### Opcionalmente: Editar o arquivo generator.py com o caminho dos jars necessários para gerar os analisadores
-
+### Usage: 
+* Write your Pascal source code on **Sample.txt** file.
+* Run Main.java to analyze the source code
 
 
 
